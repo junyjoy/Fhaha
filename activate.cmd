@@ -1,0 +1,1 @@
+C:\Users\Admin\Python\reca-project\.venv\Scripts\activate
