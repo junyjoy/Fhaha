@@ -8,27 +8,35 @@ from fhaa import db
 class User(db.Model):
     """환자 테이블  \n
     Variables: \n
-        `email`: 이메일 (PK) \n
-        `username`: 이름 \n
-        `password`: 비밀번호 \n
-        `phone`: 핸드폰 \n
-        `birth`: 생년월일 \n
+        `pat_ema`: 이메일 (PK) \n
+        `pat_name`: 환자 이름 \n
+        `pat_pw`: 비밀번호 \n
+        `pat_tel`: 핸드폰 \n
+        `pat_bir`: 생년월일 \n
+        
     Authors: jlee (junlee9834@gmail.com)         
     """
-    email = db.Column(db.String(), primary_key=True) # 이메일 (PK)    
-    name = db.Column(db.String(), unique=True, nullable=False) # 이름
-    pwd = db.Column(db.String(), nullable=False) # 비밀번호
-    phone = db.Column(db.String(), nullable=False) # 핸드폰
-    birth = db.Column(db.Date(), nullable=False) # 생년월일
+    pat_ema = db.Column(db.String(), primary_key=True) 
+    pat_name = db.Column(db.String(), unique=True, nullable=False) 
+    pat_pw = db.Column(db.String(), nullable=False)
+    pat_tel = db.Column(db.String(), nullable=False)
+    pat_bir = db.Column(db.Date(), nullable=False)
         
 class Hospital(db.Model):
     """병원 테이블
-    
+    Variables: \n
+        `hos_cid`: 사업자등록번호 (PK) \n
+        `hos_pw`: 비밀번호 \n
+        `hos_type`: 의료종목 \n
+        `hos_name`: 병원명 \n
+        `hos_addr`: 병원주소 \n
+        `hos_tel`: 전화번호 \n
+        
     Authors: jlee (junlee9834@gmail.com) 
     """
-    crn = db.Column(db.String(), primary_key=True) # 사업자등록번호
-    pwd = db.Column(db.String(), nullable=False) # 비밀번호
-    dept = db.Column(db.String(), nullable=False) # 의료종목
-    name = db.Column(db.String(), nullable=False) # 병원명
-    addr = db.Column(db.String(), nullable=False) # 병원주소
-    tel = db.Column(db.String(), nullable=False) # 전화번호
+    hos_cid = db.Column(db.String(), primary_key=True) 
+    hos_pw = db.Column(db.String(), nullable=False)
+    hos_type = db.Column(db.String(), nullable=False) 
+    hos_name = db.Column(db.String(), nullable=False)
+    hos_addr = db.Column(db.String(), nullable=False)
+    hos_tel = db.Column(db.String(), nullable=False) 
