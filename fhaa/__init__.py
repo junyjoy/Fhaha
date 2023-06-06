@@ -1,7 +1,14 @@
+"""
+fhaa app
+Authors: jlee (junlee9834@gmail.com)
+"""
+
 from flask import Flask # pip install flask
 from flask_migrate import Migrate # pip install flask-migrate
 from flask_sqlalchemy import SQLAlchemy # pip install flask-migrate
 from sqlalchemy import MetaData
+
+import config
 
 naming_convention = {
     "ix": 'ix_%(column_0_label)s',
@@ -17,6 +24,7 @@ migrate = Migrate()
 
 def create_app():
     app = Flask(__name__)
+    app.config.from_object(config)
     
     # ORM (DB)
     db.init_app(app)
