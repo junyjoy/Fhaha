@@ -1,0 +1,62 @@
+<style>
+body {
+  display: flex;
+  align-items: center;
+  padding-top: 40px;
+  padding-bottom: 100px;
+  background-color: #f5f5f5;
+}
+.form-signin {
+  width: 100%;
+  max-width: 500px;
+  padding: 15px;
+  margin: auto;
+}
+.login{
+  margin-top: 5px;
+}
+</style>
+<script> 
+  function myFunction() { 
+      if (chk_info="hospital"){ 
+           document.getElementsByTagName("INPUT")[2].setAttribute("placeholder", "사업자번호")
+
+    }
+    else if (chk_info="user"){ document.getElementsByTagName("INPUT")[2].setAttribute("placeholder", "email")
+
+  }
+    } 
+  </script> 
+
+<html> 
+<body> 
+
+
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+  <div class="form-signin">
+      <label class="form-label mb-3">Login</label>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked="" >
+        <label class="form-check-label" for="optionsRadios1">
+          환자
+        </label>
+          <div class="form-floating mb-3">
+          <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" >
+          <label for="floatingInput">Email address</label>
+          </div>
+          <div class="form-floating">
+          <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+          <label for="floatingInput">Password</label>
+          </div>
+          <div class="login">
+          <button type="button" class="btn btn-primary" style="width:100%">Login</button>
+          </div>
+          
+          </div>
+          
+  </div>
+</div>
+
+{% endblock %}
