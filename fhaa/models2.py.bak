@@ -1,0 +1,96 @@
+# coding: utf-8
+from fhaa.init_db import Base
+from sqlalchemy import  Column, Integer, String, Date, ForeignKey, ForeignKeyConstraint, Table, Index
+from sqlalchemy.orm import relationship, backref
+
+
+# HosSub = Table(
+#     'hos_sub',
+#     Column('hos_cid', ForeignKey('hospital.hos_cid'), primary_key=True, nullable=False, index=True),
+#     Column('ill_pid', ForeignKey('subject.ill_pid'), primary_key=True, nullable=False, index=True)
+# )
+
+class Doctor(Base):
+    __tablename__ = 'doctor'
+    # __table_args__ = (
+    #     ForeignKeyConstraint(['hos_cid', 'ill_pid'], ['hos_sub.hos_cid', 'hos_sub.ill_pid']),
+    #     Index('fk_doctor_hos_sub1_idx', 'hos_cid', 'ill_pid')
+    # )
+
+    doc_name = Column(String(20), nullable=False)
+    doc_type = Column(String(20), nullable=False)
+    doc_pid = Column(String(11), primary_key=True, nullable=False)
+    hos_cid = Column(String(11), primary_key=True, nullable=False)
+    ill_pid = Column(String(3), primary_key=True, nullable=False)
+
+    hos_sub = relationship('HosSub', primaryjoin='and_(Doctor.hos_cid == HosSub.hos_cid, Doctor.ill_pid == HosSub.ill_pid)', backref='doctors')
+
+
+class HosSub(Base):
+    __tablename__ = 'hos_sub'
+    hos_cid = Column(ForeignKey('Hospital.hos_cid'), primary_key=True, nullable=False, index=True)
+    ill_pid = Column(ForeignKey('Subject.ill_pid'), primary_key=True, nullable=False, index=True)
+
+
+class Hospital(Base):
+    __tablename__ = 'hospital'
+
+    hos_name = Column(String(20), nullable=False)
+    hos_tel = Column(String(12), nullable=False)
+    hos_addr = Column(String(80), nullable=False)
+    hos_cid = Column(String(11), primary_key=True)
+    hos_pwd = Column(String(20), nullable=False)
+    hos_type = Column(String(20), nullable=False)
+
+    subject = relationship('Subject', secondary='hos_sub', backref='hospitals')
+
+
+class Matching(Base):
+    __tablename__ = 'matching'
+    # __table_args__ = (
+    #     ForeignKeyConstraint(['req_rid', 'pat_ema'], ['request.req_rid', 'request.pat_ema']),
+    #     Index('fk_matching_request1_idx', 'req_rid', 'pat_ema')
+    # )
+
+    mat_id = Column(Integer, primary_key=True, nullable=False)
+    req_rid = Column(Integer, primary_key=True, nullable=False)
+    pat_ema = Column(String(30), primary_key=True, nullable=False)
+    hos_cid = Column(ForeignKey('hospital.hos_cid'), primary_key=True, nullable=False, index=True)
+
+    hospital = relationship('Hospital', primaryjoin='Matching.hos_cid == Hospital.hos_cid', backref='matchings')
+    request = relationship('Request', primaryjoin='and_(Matching.req_rid == Request.req_rid, Matching.pat_ema == Request.pat_ema)', backref='matchings')
+
+
+
+class Request(Base):
+    __tablename__ = 'request'
+
+    req_type = Column(String(20), nullable=False)
+    req_loc = Column(String(80), nullable=False)
+    req_time = Column(String(20), nullable=False)
+    req_req = Column(String(200), nullable=False)
+    req_rid = Column(Integer, primary_key=True, nullable=False)
+    pat_ema = Column(ForeignKey('user.pat_ema'), primary_key=True, nullable=False, index=True)
+
+    user = relationship('User', primaryjoin='Request.pat_ema == User.pat_ema', backref='requests')
+
+
+
+class Subject(Base):
+    __tablename__ = 'subject'
+
+    ill_name = Column(String(20), nullable=False)
+    ill_sym = Column(String(50), nullable=False)
+    ill_pid = Column(String(3), primary_key=True)
+    ill_type = Column(String(20), nullable=False)
+
+
+
+class User(Base):
+    __tablename__ = 'user'
+
+    pat_name = Column(String(10), nullable=False)
+    pat_bir = Column(Date, nullable=False)
+    pat_ema = Column(String(30), primary_key=True)
+    pat_pw = Column(String(15), nullable=False)
+    pat_tel = Column(String(11), nullable=False)
