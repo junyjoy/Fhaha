@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block content %}
+<!-- Authors: jlee (junlee9834@gmail.com) -->
+<div class="container" style="margin-top: 7rem;">
+    <h5 class="my-3 border-bottom pb-2">회원가입 - 일반 사용자</h5>
+    <form method="post">
+        {{ form.csrf_token }}
+        {% include "form_errors.html" %}
+
+        <div class="mb-3">
+            <label for="email">ID (Email)</label>
+            <input type="text" class="form-control" name="email" id="email" value="{{ form.email.data or '' }}" />
+        </div>
+        <div class="mb-3">
+            <label for="password1">비밀번호</label>
+            <input type="password" class="form-control" name="password1" id="password1"
+                value="{{ form.password1.data or '' }}" />
+        </div>
+        <div class="mb-3">
+            <label for="password2">비밀번호 확인</label>
+            <input type="password" class="form-control" name="password2" id="password2"
+                value="{{ form.password2.data or '' }}" />
+        </div>
+        <div class="mb-3">
+            <label for="name">사용자 이름</label>
+            <input type="text" class="form-control" name="name" id="name" value="{{ form.name.data or '' }}" />
+        </div>
+        <div class="mb-3">
+            <label for="phone">전화번호</label>
+            <input type="text" class="form-control" name="phone" id="phone" value="{{ form.phone.data or '' }}" />
+        </div>
+        <div class="mb-3">
+            <label for="birth">생년월일</label>
+            <input type="text" class="form-control" name="birth" id="birth" value="{{ form.birth.data or '' }}" />
+        </div>
+        <div class="mt-5">
+            <button   button type="submit" class="btn btn-primary">회원가입</button>
+        </div>
+
+
+    </form>
+</div>
+{% endblock %}
