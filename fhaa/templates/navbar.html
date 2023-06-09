@@ -1,6 +1,6 @@
 <div class="navbar navbar-expand-lg fixed-top navbar-dark bg-primary">
     <div class="container">
-        <a href="/main.html" class="navbar-brand">FHAA</a>
+        <a href="{{ url_for('main.index') }}" class="navbar-brand">FHAA</a>
         <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse"
             data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
             aria-label="Toggle navigation">
@@ -28,7 +28,7 @@
                 </li>
                 <li class="nav-item">
                     <a rel="noopener" class="nav-link"
-                        href="{{ url_for('log.login') }}"><i class="bi bi-github"></i> Login</a>
+                        href="{{ url_for('login.login') }}"><i class="bi bi-github"></i> Login</a>
                 </li>
                 <li class="nav-item">
                     <a rel="noopener" class="nav-link" 
