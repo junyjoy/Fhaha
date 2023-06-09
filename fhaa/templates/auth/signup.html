@@ -6,19 +6,21 @@
     <div class="row">
     <div class="col-sm-6">
         <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">일반 사용자</h5>
-                <p class="card-text">일반 사용자용 계정을 생성합니다.</p>
-                <a href="{{ url_for('auth.patient_signup') }}"  class="btn btn-primary">일반 사용자로 회원가입</a>
+            <div class="card-body d-flex flex-column align-items-center">
+                <h5 class="card-title">일반사용자</h5>
+                <p class="card-text">일반사용자용 계정을 생성합니다.</p>
+                <img class="w-25" src="{{ url_for('static', filename='patient.png') }}">
+                <a href="{{ url_for('auth.patient_signup') }}"  class="btn btn-primary mt-3">일반 사용자로 회원가입</a>
             </div>
         </div>
     </div>
     <div class="col-sm-6">
         <div class="card">
-            <div class="card-body">
+            <div class="card-body d-flex flex-column align-items-center">
                 <h5 class="card-title">병원</h5>
                 <p class="card-text">병원용 계정을 생성합니다.</p>
-                <a href="{{ url_for('auth.hospital_signup') }}" class="btn btn-primary">병원으로 회원가입</a>
+                <img class="w-25" src="{{ url_for('static', filename='hospital.png') }}">
+                <a href="{{ url_for('auth.hospital_signup') }}" class="btn btn-primary mt-3">병원으로 회원가입</a>
             </div>
         </div>
     </div>

@@ -38,9 +38,10 @@
         </div>
         <div class="mb-3">
             <label for="type">의료종목</label>
-            <!-- <SELECT name="type" id="type" value="{{ form.type.data or '' }}">
-            </SELECT><label for="type">의료종목</label> -->
-            <input type="text" class="form-control" name="type" id="type" value="{{ form.type.data or '' }}" />
+            {% for colour in form.type %}
+                <option value="{{colour}}" SELECTED>{{colours}}</option>"
+            {% endfor %}
+            <!-- <input type="text" class="form-control" name="type" id="type" value="{{ form.type.data or '' }}" /> -->
         </div>
 
         <div class="mt-5">
