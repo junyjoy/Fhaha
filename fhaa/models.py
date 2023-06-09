@@ -40,7 +40,7 @@ class Hospital(db.Model):
     hos_tel = db.Column(db.String(12), nullable=False)
     hos_addr = db.Column(db.String(80), nullable=False)
     hos_cid = db.Column(db.String(11), primary_key=True)
-    hos_pwd = db.Column(db.String(20), nullable=False)
+    hos_pwd = db.Column(db.String(102), nullable=False)
     hos_type = db.Column(db.String(20), nullable=False)
 
 
@@ -92,5 +92,5 @@ class User(db.Model):
     pat_name = db.Column(db.String(10), nullable=False)
     pat_bir = db.Column(db.Date, nullable=False)
     pat_ema = db.Column(db.String(30), primary_key=True)
-    pat_pw = db.Column(db.String(15), nullable=False)
+    pat_pw = db.Column(db.String(102), nullable=False)
     pat_tel = db.Column(db.String(11), nullable=False)

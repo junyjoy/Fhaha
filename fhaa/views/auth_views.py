@@ -32,7 +32,7 @@ def patient_signup():
             
             db.session.add(user)
             db.session.commit()
-            return redirect(url_for('auth.congrats'))
+            return redirect(url_for('auth.congrats', user_id=user.pat_ema, user_name=user.pat_name))
         else:
             flash('이미 존재하는 사용자입니다.')
     return render_template('auth/patient_signup.html', form=form)
@@ -55,12 +55,15 @@ def hospital_signup():
             # 가입완료 페이지에서 id와 name을 표시하기 위함
             session['created_id'] = form.crn.data
             session['created_name'] = form.name.data
-            return redirect(url_for('auth.congrats'))
+            return redirect(url_for('auth.congrats', user_id=user.hos_cid, user_name=user.hos_name))
         else:
             flash('이미 존재하는 사용자입니다.')
     return render_template('auth/hospital_signup.html', form=form)
 
 
-@bp.route('/congrats/')
+@bp.route('/congrats/', methods=('POST',))
 def congrats():
-    return render_template('auth/congrats.html')
+    if request.method == 'POST' :
+        return render_template('auth/congrats.html')
+    else:
+        return redirect(url_for('main.index'))
