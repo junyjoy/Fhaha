@@ -38,14 +38,11 @@
         </div>
         <div class="mb-3">
             <label for="type">의료종목</label>
-            {% for colour in form.type %}
-                <option value="{{colour}}" SELECTED>{{colours}}</option>"
-            {% endfor %}
-            <!-- <input type="text" class="form-control" name="type" id="type" value="{{ form.type.data or '' }}" /> -->
+            <select class="form-control" name="type" id="type"></select>
         </div>
 
         <div class="mt-5">
-            <button button type="submit" class="btn btn-primary">회원가입</button>
+            <button button type="submit" class="btn btn-primary mb-3">회원가입</button>
         </div>
 
 
