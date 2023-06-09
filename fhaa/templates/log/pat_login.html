@@ -38,24 +38,28 @@ body {
   <div class="form-signin">
       <label class="form-label mb-3"><h3 style="color:4c2a80; margin-left: 23px;" >Login</h3></label>
       <div class="form-check">
-        
+        <form method="post">
+          {{ form.csrf_token }}
+          {% include "form_errors.html" %}
+
           <div class="form-floating mb-3">
-          <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" >
-          <label for="floatingInput">Email address</label>
+          <input type="email" class="form-control" name="email" id="email" placeholder="name@example.com" >
+          <label for="email">Email address</label>
           </div>
           <div class="form-floating">
-          <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
-          <label for="floatingInput">Password</label>
+          <input type="password" class="form-control" name="password" id="password" placeholder="Password">
+          <label for="password">Password</label>
           </div>
           <div class="login">
-          <button type="button" class="btn btn-primary" style="width:100%">Login</button>
+          <button type="submit" class="btn btn-primary" style="width:100%">Login</button>
           </div>
           <div class="bs-component" style="margin-top: 10px;">
                 <div class="alert alert-dismissible alert-primary">
                   <strong>잠깐!</strong> <a href="{{ url_for('auth.hospital_signup') }}" class="alert-link">회원가입</a> 먼저 하시죠?
                 </div>
               </div>
-        </div>
+        </form>    
+      </div>
           
   </div>
 </div>

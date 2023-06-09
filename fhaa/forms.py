@@ -33,7 +33,7 @@ class UserCreateForm(FlaskForm):
     
     
 class HospitalCreateForm(FlaskForm):
-    """환자 회원가입 폼 \n
+    """병원 회원가입 폼 \n
     Field:
         `crn` : Company Registration Number, pk \n
         `nickname` : nickname \n
@@ -51,3 +51,12 @@ class HospitalCreateForm(FlaskForm):
     hospital_types = [('---', ''), ("내과","내과"), ("피부과","피부과"), ("비뇨의학과","비뇨의학과"), ("산부인과","산부인과"),\
         ("안과","안과"), ("정형외과","정형외과"), ("이비인후과","이비인후과"), ("치과","치과")]
     type = SelectField('의료종목', choices = hospital_types,validators=[DataRequired('값이 비었습니다.'), Length(min=1, max=20)])
+
+
+class UserLoginForm(FlaskForm):
+    email = StringField('사용자이메일', validators=[DataRequired(), Length(min=9, max=50)])
+    password = PasswordField('비밀번호', validators=[DataRequired()])
+
+class HospitalLoginForm(FlaskForm):
+    crn = StringField('사업자등록번호', validators=[DataRequired(), Length(min=9, max=50)])
+    password = PasswordField('비밀번호', validators=[DataRequired()])
