@@ -25,7 +25,7 @@ def pat_login():
         if error is None:
             session.clear()
             session['user_id'] = user.pat_ema
-            session['user_type'] = "pat"
+            session['user_type'] = "patient"
             return redirect(url_for('main.index'))
         flash(error)
     return render_template('log/pat_login.html', form=form)
@@ -43,7 +43,7 @@ def hos_login():
         if error is None:
             session.clear()
             session['user_id'] = user.hos_cid
-            session['user_type'] = "hos"
+            session['user_type'] = "hospital"
             return redirect(url_for('main.index'))
         flash(error)
     return render_template('log/hos_login.html', form=form)
@@ -57,8 +57,10 @@ def logout():
 @bp.before_app_request
 def load_logged_in_user():
     user_id = session.get('user_id')
+    user_type = session.get('user_type')
     if user_id is None:
         g.user = None
+        g.user_type = None
     else:
         g.user = User.query.get(user_id)
-
+        g.user_type = User.query.get(user_type)

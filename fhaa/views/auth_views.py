@@ -21,7 +21,7 @@ def signup():
 @bp.route('/patient/', methods=('GET', 'POST'))
 def patient_signup():
     form = UserCreateForm()
-    if request.method == 'POST' and form.validate_on_submit():
+    if request.method == 'POST' and form.validate_on_submit() and g.user is None:
         user = User.query.filter_by(pat_ema=form.email.data).first()
         if not user:
             user = User(pat_ema=form.email.data,
@@ -41,7 +41,7 @@ def patient_signup():
 @bp.route('/hospital/', methods=('GET', 'POST'))
 def hospital_signup():
     form = HospitalCreateForm()
-    if request.method == 'POST' and form.validate_on_submit():
+    if request.method == 'POST' and form.validate_on_submit() and g.user is None: 
         user = Hospital.query.filter_by(hos_cid=form.crn.data).first()
         if not user:
             user = Hospital(hos_cid=form.crn.data,
@@ -64,6 +64,8 @@ def hospital_signup():
 @bp.route('/congrats/', methods=('POST',))
 def congrats():
     if request.method == 'POST' :
-        return render_template('auth/congrats.html')
+        user_id = request.get_data('user_id')
+        user_name = request.get_data('user_name')
+        return render_template('auth/congrats.html', user_id=user_id, user_name=user_name)
     else:
         return redirect(url_for('main.index'))

@@ -21,21 +21,10 @@ def change():
 
     user_type = session.get('user_type')
     
-    if user_type == "pat":
+    if user_type == "patient":
         return render_template('change/changeN.html')
-    elif user_type == "hos":
+    elif user_type == "hospital":
         return render_template('change/changeH.html')
     else:
         return redirect(url_for('main.index'))
 
-
-@bp.before_app_request
-def load_logged_in_user():
-    user_id = session.get('user_id')
-    user_type = session.get('user_type')
-    if user_id is None:
-        g.user = None
-        g.user_type = None
-    else:
-        g.user = User.query.get(user_id)
-        g.user_type = User.query.get(user_type)
