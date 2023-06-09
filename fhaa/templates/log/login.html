@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<!-- Authors: jlee (junlee9834@gmail.com) -->
+<div class="container" style="margin-top: 7rem;">
+    <h5 class="my-3 border-bottom pb-2">Login</h5>
+    <div class="row">
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">일반 사용자</h5>
+                <p class="card-text">일반 사용자로 로그인합니다.</p>
+                <a href="{{ url_for('log.pat_login') }}"  class="btn btn-primary">일반 사용자 로그인</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">병원</h5>
+                <p class="card-text">병원 계정으로 로그인합니다.</p>
+                <a href="{{ url_for('log.hos_login') }}" class="btn btn-primary">병원 로그인</a>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+{% endblock %}
