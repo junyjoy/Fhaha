@@ -45,3 +45,8 @@ def hos_login():
             return redirect(url_for('main.index'))
         flash(error)
     return render_template('log/hos_login.html', form=form)
+
+
+@bp.route('/', methods=('GET','POST'))
+def logout():
+    return render_template('log/login.html')
