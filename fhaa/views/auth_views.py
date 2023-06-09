@@ -15,7 +15,7 @@ bp = Blueprint('auth', __name__, url_prefix='/auth')
 
 @bp.route('/signup/')
 def signup():
-    return render_template('auth/signup')
+    return render_template('auth/signup.html')
 
 
 @bp.route('/signup/patient/', methods=('GET', 'POST'))

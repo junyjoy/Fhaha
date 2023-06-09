@@ -42,11 +42,12 @@ class HospitalCreateForm(FlaskForm):
         `phone` : phone number \n
     Authors: jlee (junlee9834@gmail.com)             
     """
-    crn = StringField('ID(사업자등록번호)', validators=[DataRequired('값이 비었습니다.'), Length(min=11, max=11)])
+    crn = StringField('ID(사업자등록번호)', validators=[DataRequired('값이 비었습니다.'), Length(min=11, max=11, message='사업자등록번호는 11자 입니다.')])
     password1 = PasswordField('비밀번호', validators=[DataRequired('값이 비었습니다.'), EqualTo('password2', '비밀번호가 일치하지 않습니다.')])
     password2 = PasswordField('비밀번호확인', validators=[DataRequired('값이 비었습니다.')])
     name = StringField('병원명', validators=[DataRequired('값이 비었습니다.'), Length(min=2, max=100)])
     address = StringField('병원 주소', validators=[DataRequired('값이 비었습니다.'), Length(min=2, max=100)])
     tel = StringField('전화번호', validators=[DataRequired('값이 비었습니다.'), Length(min=9, max=11)])
-    hospital_types = ["내과", "피부과", "비뇨의학과", "산부인과", "안과", "정형외과", "이비인후과", "치과"]
-    type = SelectField('의료종목', choices = hospital_types, validators=[DataRequired('값이 비었습니다.'), Length(min=1, max=20)])
+    hospital_types = [('---', ''), ("내과","내과"), ("피부과","피부과"), ("비뇨의학과","비뇨의학과"), ("산부인과","산부인과"),\
+        ("안과","안과"), ("정형외과","정형외과"), ("이비인후과","이비인후과"), ("치과","치과")]
+    type = SelectField('의료종목', choices = hospital_types,validators=[DataRequired('값이 비었습니다.'), Length(min=1, max=20)])
