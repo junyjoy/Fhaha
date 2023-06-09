@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, session, request, flash, url_for
+from flask import Blueprint, render_template, session, request, flash, url_for, g
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import redirect
 
@@ -25,6 +25,7 @@ def pat_login():
         if error is None:
             session.clear()
             session['user_id'] = user.pat_ema
+            session['user_type'] = "pat"
             return redirect(url_for('main.index'))
         flash(error)
     return render_template('log/pat_login.html', form=form)
@@ -41,7 +42,8 @@ def hos_login():
             error = "비밀번호 틀렸음 ㅋㅋ"
         if error is None:
             session.clear()
-            session['hospital_cid'] = user.id
+            session['user_id'] = user.hos_cid
+            session['user_type'] = "hos"
             return redirect(url_for('main.index'))
         flash(error)
     return render_template('log/hos_login.html', form=form)
@@ -50,3 +52,11 @@ def hos_login():
 @bp.route('/', methods=('GET','POST'))
 def logout():
     return render_template('log/login.html')
+
+@bp.before_app_request
+def load_logged_in_user():
+    user_id = session.get('user_id')
+    if user_id is None:
+        g.user = None
+    else:
+        g.user = User.query.get(user_id)
