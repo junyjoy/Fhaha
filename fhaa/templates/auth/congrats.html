@@ -1,7 +1,27 @@
 {% extends "base.html" %}
 {% block content %}
 <!-- Authors: jlee (junlee9834@gmail.com) -->
-<div>
-    <p class="display-3">회원가입이 완료되었습니다.</p>
+<div class="container d-flex flex-column align-items-center" style="margin-top: 7rem;">
+    <div class="container primary" style="border-bottom: 1px solid;">
+        <h3 class="text-center">회원가입이 완료되었습니다.</h3>
+    </div>
+
+    <table class="table w-50 mt-5">
+        <tbody>
+            <tr class="table-light">
+                <th scope="row">ID</th>
+                <td>Mark</td>
+            </tr>
+            <tr class="table-light">
+                <th scope="row">Name</th>
+                <td>Jacob</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="container d-flex flex-row justify-content-center mt-5" >
+        <button type="button" class="btn btn-primary">메인페이지</button>
+        <button type="button" class="btn btn-primary">로그인</button>
+    </div>
 </div>
 {% endblock %}
