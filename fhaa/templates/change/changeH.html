@@ -6,15 +6,18 @@
                 <h1>개인정보 수정(병원)</h1>
             </div>
             <div>
-                <form class="form-group" action="updateProcess.do" method="post">
+                <form class="form-group gap-3" action="updateProcess.do" method="post">
                 <table class="table table-striped row">
                     <tr>
                         <th>병원 위치</th>
-                        <td><input class="form-control" type="text" name="subject" placeholder="주소"><input class="form-control" type="password" name="password" placeholder="상세 주소"></td>
+                        <td>
+                            <input class="form-control mb-1" type="text" name="subject" placeholder="주소">
+                            <input class="form-control" type="password" name="password" placeholder="상세 주소">
+                        </td>
                     </tr>
                     <th>비밀번호 <br>수정</th>
                     <td><input class="form-control" type="password" name="password" placeholder="기존 비밀번호">
-                        <br><input class="form-control" type="password" name="password" placeholder="새로운 비밀번호"><input class="form-control" type="password" name="password" placeholder="새로운 비밀번호확인">
+                        <br><input class="form-control mb-1" type="password" name="password" placeholder="새로운 비밀번호"><input class="form-control" type="password" name="password" placeholder="새로운 비밀번호확인">
                     </td>
                     <tr>
                         <th>전화번호 <br>수정</th>
@@ -26,7 +29,7 @@
                         <td>
                             <input class = "form-check-input" type="checkbox" name="medical" value="medicine"> 내과<br>
                             <input class = "form-check-input" type="checkbox" name="medical" value="skin"> 피부과 <br>
-                            <input class = "form-check-input" type="checkbox" name="medical" value="dick"> 비뇨의학과 <br>
+                            <input class = "form-check-input" type="checkbox" name="medical" value="urology"> 비뇨의학과 <br>
                             <input class = "form-check-input" type="checkbox" name="medical" value="baby"> 산부인과 <br>
                             <input class = "form-check-input" type="checkbox" name="medical" value="eye"> 안과 <br>
                             <input class = "form-check-input" type="checkbox" name="medical" value="bone"> 정형외과 <br>
@@ -42,7 +45,7 @@
             </div>
             </div>
             <div class="btn-group col-md-offset-9">
-              <a href="getList.do" class="btn btn-default">회원탈퇴</a>
-            </div>
+              <a href="{{ url_for('main.index') }}" class="btn btn-default bg-danger bg-danger text-light">회원탈퇴</a>
+            </div>          
         </div>
 {% endblock %}
