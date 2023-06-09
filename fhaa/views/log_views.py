@@ -49,9 +49,10 @@ def hos_login():
     return render_template('log/hos_login.html', form=form)
 
 
-@bp.route('/', methods=('GET','POST'))
+@bp.route('/logout/')
 def logout():
-    return render_template('log/login.html')
+    session.clear()
+    return redirect(url_for('main.index'))
 
 @bp.before_app_request
 def load_logged_in_user():

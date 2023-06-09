@@ -6,8 +6,3 @@ bp = Blueprint('main', __name__, url_prefix='/')
 @bp.route('/')
 def index():
     return render_template('main/main.html')
-
-
-@bp.route('/hello')
-def hello_pybo():
-    return 'Hello, Pybo!!!'
