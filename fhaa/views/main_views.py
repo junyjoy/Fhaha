@@ -1,11 +1,11 @@
-from flask import Blueprint
+from flask import Blueprint, render_template
 
 bp = Blueprint('main', __name__, url_prefix='/')
 
 
 @bp.route('/')
 def index():
-    return 'Pybo index'
+    return render_template('main/main.html')
 
 
 @bp.route('/hello')
