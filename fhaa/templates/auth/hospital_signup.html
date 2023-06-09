@@ -2,7 +2,7 @@
 {% block content %}
 <!-- Authors: jlee (junlee9834@gmail.com) -->
 <div class="container w-50" style="margin-top: 7rem;">
-    <h5 class="my-3 border-bottom pb-2">회원가입 - 병원</h5>
+    <h5 class="my-3 border-bottom pb-2">회원가입 <span class="badge rounded-pill bg-secondary">병원</span></h5>
     <form method="post">
         {{ form.csrf_token }}
         {% include "form_errors.html" %}
@@ -37,9 +37,12 @@
             <input type="text" class="form-control" name="tel" id="tel" value="{{ form.tel.data or '' }}" />
         </div>
         <div class="mb-3">
-            <label for="type">타입(임시)</label>
+            <label for="type">의료종목</label>
+            <!-- <SELECT name="type" id="type" value="{{ form.type.data or '' }}">
+            </SELECT><label for="type">의료종목</label> -->
             <input type="text" class="form-control" name="type" id="type" value="{{ form.type.data or '' }}" />
         </div>
+
         <div class="mt-5">
             <button button type="submit" class="btn btn-primary">회원가입</button>
         </div>

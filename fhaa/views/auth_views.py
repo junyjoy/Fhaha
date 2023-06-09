@@ -57,7 +57,7 @@ def hospital_signup():
     return render_template('auth/hospital_signup.html', form=form)
 
 
-
+@bp.route('/congrats/')
 def congrats():
     return render_template('auth/congrats.html')
 # @bp.route('/congrats/', methods=('POST'))
