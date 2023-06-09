@@ -6,31 +6,13 @@ from fhaa import db
 
 class Doctor(db.Model):
     __tablename__ = 'doctor'
-    __table_args__ = (
-        db.ForeignKeyConstraint(['sub_id', 'hos_cid', 'ill_pid'], ['hos_sub.sub_id', 'hos_sub.hos_cid', 'hos_sub.ill_pid']),
-        db.Index('fk_doctor_hos_sub1_idx', 'sub_id', 'hos_cid', 'ill_pid')
-    )
 
     doc_name = db.Column(db.String(20), nullable=False)
     doc_type = db.Column(db.String(20), nullable=False)
     doc_pid = db.Column(db.String(11), primary_key=True, nullable=False)
-    ill_pid = db.Column(db.String(3), primary_key=True, nullable=False)
-    sub_id = db.Column(db.Integer, primary_key=True, nullable=False)
-    hos_cid = db.Column(db.String(11), primary_key=True, nullable=False)
-
-    sub = db.relationship('HosSub', primaryjoin='and_(Doctor.sub_id == HosSub.sub_id, Doctor.hos_cid == HosSub.hos_cid, Doctor.ill_pid == HosSub.ill_pid)', backref='doctors')
-
-
-
-class HosSub(db.Model):
-    __tablename__ = 'hos_sub'
-
-    sub_id = db.Column(db.Integer, primary_key=True, nullable=False)
     hos_cid = db.Column(db.ForeignKey('hospital.hos_cid'), primary_key=True, nullable=False, index=True)
-    ill_pid = db.Column(db.ForeignKey('subject.ill_pid'), primary_key=True, nullable=False, index=True)
 
-    hospital = db.relationship('Hospital', primaryjoin='HosSub.hos_cid == Hospital.hos_cid', backref='hos_subs')
-    subject = db.relationship('Subject', primaryjoin='HosSub.ill_pid == Subject.ill_pid', backref='hos_subs')
+    hospital = db.relationship('Hospital', primaryjoin='Doctor.hos_cid == Hospital.hos_cid', backref='doctors')
 
 
 
