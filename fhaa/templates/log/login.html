@@ -1,3 +1,15 @@
+<style>
+#wrapper{
+  height: auto;
+  min-height: 100%;
+  padding-bottom: 10px;
+}
+footer{
+  height: 10px;
+  position : relative;
+  transform : translateY(-100%);
+}
+</style>
 {% extends "base.html" %}
 {% block content %}
 <!-- Authors: jlee (junlee9834@gmail.com) -->
@@ -28,7 +40,8 @@
 </div>
 
 <!-- Footer-->
-<footer class="bg-primary py-5 mt-auto">
-    <div class="container"><p class="m-0 text-center text-white">Copyright &copy; Find Hospital anytime, anywhere</p></div>
+<div id="wrapper"></div>
+<footer class="bg-primary py-3 mt-auto">
+    <div class="container"><p class="m-0 text-center text-white" >Copyright &copy; Find Hospital anytime, anywhere</p></div>
 </footer>
 {% endblock %}

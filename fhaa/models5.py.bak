@@ -1,13 +1,17 @@
 # coding: utf-8
 from flask_sqlalchemy import SQLAlchemy
-from fhaa import db
+
+
+db = SQLAlchemy()
+
 
 
 class Doctor(db.Model):
     __tablename__ = 'doctor'
     __table_args__ = (
-        db.ForeignKeyConstraint(['sub_id', 'hos_cid', 'ill_pid'], ['hos_sub.sub_id', 'hos_sub.hos_cid', 'hos_sub.ill_pid']),
-        db.Index('fk_doctor_hos_sub1_idx', 'sub_id', 'hos_cid', 'ill_pid')
+        db.ForeignKeyConstraint(['sub_id', 'hos_cid'], ['hos_sub.sub_id', 'hos_sub.hos_cid']),
+        db.Index('fk_doctor_hos_sub1', 'sub_id', 'hos_cid'),
+        db.Index('fk_doctor_hos_sub1_idx', 'ill_pid', 'sub_id', 'hos_cid')
     )
 
     doc_name = db.Column(db.String(20), nullable=False)
@@ -17,7 +21,7 @@ class Doctor(db.Model):
     sub_id = db.Column(db.Integer, primary_key=True, nullable=False)
     hos_cid = db.Column(db.String(11), primary_key=True, nullable=False)
 
-    sub = db.relationship('HosSub', primaryjoin='and_(Doctor.sub_id == HosSub.sub_id, Doctor.hos_cid == HosSub.hos_cid, Doctor.ill_pid == HosSub.ill_pid)', backref='doctors')
+    sub = db.relationship('HosSub', primaryjoin='and_(Doctor.sub_id == HosSub.sub_id, Doctor.hos_cid == HosSub.hos_cid)', backref='doctors')
 
 
 

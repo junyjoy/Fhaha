@@ -25,8 +25,8 @@
                 {% if g.user %}<li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" id="user">{{ g.user }}</a>
                     <div class="dropdown-menu" aria-labelledby="user">
-                        <a class="dropdown-item" href="#" download="">Logout</a>
-                        <a class="dropdown-item" href="#" download="">{{ g.user }}</a>
+                        <a class="dropdown-item" href="{{ url_for('login.logout')}}">Logout</a>
+                        <a class="dropdown-item" href="#">{{ g.user }}</a>
                         <!-- <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="../5/pulse/bootstrap.min.css" download="">bootstrap.min.css</a>
                         <div class="dropdown-divider"></div>
