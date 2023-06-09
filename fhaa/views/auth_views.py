@@ -29,11 +29,9 @@ def patient_signup():
                         pat_pw=generate_password_hash(form.password1.data),
                         pat_tel=form.phone.data,
                         pat_bir=form.birth.data)
+            
             db.session.add(user)
             db.session.commit()
-            # 가입완료 페이지에서 id와 name을 표시하기 위함
-            session['created_id'] = form.email.data
-            session['created_name'] = form.name.data
             return redirect(url_for('auth.congrats'))
         else:
             flash('이미 존재하는 사용자입니다.')
@@ -63,15 +61,6 @@ def hospital_signup():
     return render_template('auth/hospital_signup.html', form=form)
 
 
-# @bp.route('/congrats/')
-# def congrats():
-#     return render_template('auth/congrats.html')
 @bp.route('/congrats/')
 def congrats():
-    created_id = session.get(['created_id'])
-    created_name = session.get(['created_name'])
-    if created_id is None or created_name is None:
-        return redirect(url_for('main.index'))
-    else:
-        return render_template('auth/congrats.html')
-
+    return render_template('auth/congrats.html')
