@@ -8,6 +8,6 @@ def index():
     return render_template('main/main.html')
 
 
-@bp.route('/hello')
+@bp.route('/main')
 def hello_pybo():
     return 'Hello, Pybo!!!'
