@@ -26,11 +26,12 @@
             <input type="text" class="form-control" name="name" id="name" value="{{ form.name.data or '' }}" />
         </div>
         <div class="mb-3">
-            <label for="address">병원 주소</label>
+            <label for="address1">병원 주소</label>
             <div class="d-flex ">
-                <input type="text" class="form-control" name="address" id="address" value="{{ form.address.data or '' }}" />
+                <input type="text" class="form-control" name="address1" id="address1" value="{{ form.address1.data or '' }}"readonly/>
                 <input type="button" class="btn btn-primary" onclick="execDaumPostcode()" value="주소 검색"><br>
             </div>
+            <input type="text" class="form-control" name="address2" id="address2" value="{{ form.address2.data or '' }}" placeholder="상세 주소" />
         </div>
         <div class="mb-3">
             <label for="tel">전화번호</label>
@@ -40,6 +41,79 @@
             <label for="type">의료종목</label>
             <select class="form-control" name="type" id="type"></select>
         </div> -->
+        <div class="mb-3">
+            <label class="mb-2" for="type">의료종목</label>
+            <table  class="table">
+                <tr>
+                    <td>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="1" id="flexCheckDefault">
+                            <label class="form-check-label" for="flexCheckDefault">내과</label>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="1" id="flexCheckDefault">
+                            <label class="form-check-label" for="flexCheckDefault">비뇨의학과</label>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="1" id="flexCheckDefault">
+                            <label class="form-check-label" for="flexCheckDefault">산부인과</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="1" id="flexCheckDefault">
+                            <label class="form-check-label" for="flexCheckDefault">소아과</label>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="1" id="flexCheckDefault">
+                            <label class="form-check-label" for="flexCheckDefault">안과</label>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="1" id="flexCheckDefault">
+                            <label class="form-check-label" for="flexCheckDefault">이비인후과</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="1" id="flexCheckDefault">
+                            <label class="form-check-label" for="flexCheckDefault">정형외과</label>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="1" id="flexCheckDefault">
+                            <label class="form-check-label" for="flexCheckDefault">치과</label>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="1" id="flexCheckDefault">
+                            <label class="form-check-label" for="flexCheckDefault">피부과</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="1" id="flexCheckDefault">
+                            <label class="form-check-label" for="flexCheckDefault">기타</label>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
         <div class="mt-5  mb-3">
             <button button type="submit" class="btn btn-primary">회원가입</button>
         </div>

@@ -48,7 +48,8 @@ class HospitalCreateForm(FlaskForm):
     password1 = PasswordField('비밀번호', validators=[DataRequired('값이 비었습니다.'), EqualTo('password2', '비밀번호가 일치하지 않습니다.')])
     password2 = PasswordField('비밀번호확인', validators=[DataRequired('값이 비었습니다.')])
     name = StringField('병원명', validators=[DataRequired('값이 비었습니다.'), Length(min=2, max=100)])
-    address = StringField('병원 주소', validators=[DataRequired('값이 비었습니다.'), Length(min=2, max=100)])
+    address1 = StringField('병원 주소', validators=[DataRequired('값이 비었습니다.'), Length(min=2, max=100)])
+    address2 = StringField('병원 상세주소', validators=[DataRequired('값이 비었습니다.'), Length(min=2, max=100)])
     tel = StringField('전화번호', validators=[DataRequired('값이 비었습니다.'), Length(min=9, max=11)])
     type = StringField('', default='')
 

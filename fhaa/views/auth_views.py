@@ -32,7 +32,7 @@ def patient_signup():
             
             db.session.add(user)
             db.session.commit()
-            return redirect(url_for('auth.congrats', user_id=user.pat_ema, user_name=user.pat_name))
+            return redirect(url_for('auth.congrats', _method='POST',user_id=user.pat_ema, user_name=user.pat_name))
         else:
             flash('이미 존재하는 사용자입니다.')
     return render_template('auth/patient_signup.html', form=form)
@@ -44,10 +44,11 @@ def hospital_signup():
     if request.method == 'POST' and form.validate_on_submit() and g.user is None: 
         user = Hospital.query.filter_by(hos_cid=form.crn.data).first()
         if not user:
+            print(form.address1.data + form.address2.data)
             user = Hospital(hos_cid=form.crn.data,
                         hos_pwd=generate_password_hash(form.password1.data),
                         hos_name=form.name.data,
-                        hos_addr=form.address.data,
+                        hos_addr=form.address1.data + form.address2.data,
                         hos_tel=form.tel.data,
                         hos_type=form.type.data)
             db.session.add(user)
@@ -55,13 +56,13 @@ def hospital_signup():
             # 가입완료 페이지에서 id와 name을 표시하기 위함
             session['created_id'] = form.crn.data
             session['created_name'] = form.name.data
-            return redirect(url_for('auth.congrats', user_id=user.hos_cid, user_name=user.hos_name))
+            return redirect(url_for('auth.congrats', _method='POST', user_id=user.hos_cid, user_name=user.hos_name))
         else:
             flash('이미 존재하는 사용자입니다.')
     return render_template('auth/hospital_signup.html', form=form)
 
 
-@bp.route('/congrats/', methods=('POST',))
+@bp.route('/congrats/', methods=('POST','GET'))
 def congrats():
     if request.method == 'POST' :
         user_id = request.get_data('user_id')
@@ -69,3 +70,4 @@ def congrats():
         return render_template('auth/congrats.html', user_id=user_id, user_name=user_name)
     else:
         return redirect(url_for('main.index'))
+    

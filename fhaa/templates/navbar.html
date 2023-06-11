@@ -18,10 +18,10 @@
             <ul class="navbar-nav ms-md-auto">
                 {% if g.user %}
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" id="user">{{ g.user  }}</a>
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" id="user">{{ g.user.pat_name  }} 님</a>
                     <div class="dropdown-menu" aria-labelledby="user">
                         <a class="dropdown-item" href="{{ url_for('login.logout')}}">Logout</a>
-                        <a class="dropdown-item" href="{{ url_for('change.change') }}">개수</a>
+                        <a class="dropdown-item" href="{{ url_for('change.change') }}">Edit account info</a>
                         <!-- <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="../5/pulse/bootstrap.min.css" download="">bootstrap.min.css</a>
                         <div class="dropdown-divider"></div>
