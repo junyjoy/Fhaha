@@ -2,27 +2,31 @@
 {% block content %}
 <div class="container w-50" style="margin-top: 7rem;">
   <div class="form-signin">
-      <label class="form-label mb-3"><h3 style="color:4c2a80; margin-left: 23px;" >Login</h3></label>
-      <div class="form-check">
+    <label class="form-label mb-3"><h3 style="color:4c2a80; margin-left: 23px;" >Login</h3></label>
+    <div class="form-check">
+      <form method="post">
+        {{ form.csrf_token }}
+        {% include "form_errors.html" %}
+
+        <div class="form-floating mb-3">
+        <input type="text" class="form-control" id="floatingInput" placeholder="사업자 등록번호10자리">
+        <label for="floatingInput">사업자 등록번호</label>
+        </div>
+        <div class="form-floating mb-3">
+        <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+        <label for="floatingInput">Password</label>
+        </div>
+        <div class="login">
+        <button type="submit" class="btn btn-primary" style="width:100%">Login</button>
+        </div>
         
-          <div class="form-floating mb-3">
-          <input type="email" class="form-control" id="floatingInput" placeholder="사업자 등록번호9자리">
-          <label for="floatingInput">사업자 등록번호</label>
-          </div>
-          <div class="form-floating mb-3">
-          <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
-          <label for="floatingInput">Password</label>
-          </div>
-          <div class="login">
-          <button type="button" class="btn btn-primary" style="width:100%">Login</button>
-          </div>
-          
-          <div class="bs-component" style="margin-top: 10px;">
-            <div class="alert alert-dismissible alert-primary">
-              <strong>잠깐!</strong> <a href="{{ url_for('auth.hospital_signup') }}" class="alert-link">회원가입</a> 먼저 하시죠?
-            </div>
+        <div class="bs-component" style="margin-top: 10px;">
+          <div class="alert alert-dismissible alert-primary">
+            <strong>잠깐!</strong> <a href="{{ url_for('auth.hospital_signup') }}" class="alert-link">회원가입</a> 먼저 하시죠?
           </div>
         </div>
+      </form>
+    </div>
           
   </div>
 </div>
