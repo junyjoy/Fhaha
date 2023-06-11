@@ -8,7 +8,8 @@ from fhaa.forms import UserCreateForm, HospitalCreateForm
 from fhaa.models import User, Hospital
 from fhaa import db
 from werkzeug.utils import redirect
-from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.security import generate_password_hash
+import functools
 
 bp = Blueprint('auth', __name__, url_prefix='/signup')
 
@@ -78,3 +79,21 @@ def congrats():
     else:
         return redirect(url_for('main.index'))
     
+
+
+def login_required(view):
+    """로그인 후 이용할 수 있는 서비스에 사용됨
+
+    Args:
+        view (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
+    @functools.wraps(view)
+    def wrapped_view(*args, **kwargs):
+        if g.user is None:
+            _next = request.url if request.method == 'GET' else ''
+            return redirect(url_for('log.login', next=_next))
+        return view(*args, **kwargs)
+    return wrapped_view

@@ -55,7 +55,7 @@ class HospitalCreateForm(FlaskForm):
 
 
 class UserLoginForm(FlaskForm):
-    email = StringField('사용자이메일', validators=[DataRequired(), Length(min=9, max=50)])
+    email = EmailField('사용자이메일', validators=[DataRequired(), Length(min=9, max=50)])
     password = PasswordField('비밀번호', validators=[DataRequired()])
 
 class HospitalLoginForm(FlaskForm):

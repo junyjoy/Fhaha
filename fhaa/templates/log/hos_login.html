@@ -3,10 +3,13 @@
 <div class="container w-50" style="margin-top: 7rem;">
   <div class="form-signin">
       <label class="form-label mb-3"><h3 style="color:4c2a80; margin-left: 23px;" >Login</h3></label>
+      <form method="post">
+        {{ form.csrf_token }}
+        {% include "form_errors.html" %}
       <div class="form-check">
         
           <div class="form-floating mb-3">
-          <input type="email" class="form-control" id="floatingInput" placeholder="사업자 등록번호9자리">
+          <input type="text" class="form-control" id="floatingInput" placeholder="사업자 등록번호9자리">
           <label for="floatingInput">사업자 등록번호</label>
           </div>
           <div class="form-floating mb-3">
@@ -14,7 +17,7 @@
           <label for="floatingInput">Password</label>
           </div>
           <div class="login">
-          <button type="button" class="btn btn-primary" style="width:100%">Login</button>
+          <button type="submit" class="btn btn-primary" style="width:100%">Login</button>
           </div>
           
           <div class="bs-component" style="margin-top: 10px;">
@@ -23,7 +26,7 @@
             </div>
           </div>
         </div>
-          
+        </form> 
   </div>
 </div>
 
