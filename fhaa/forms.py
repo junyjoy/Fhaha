@@ -36,12 +36,13 @@ class HospitalCreateForm(FlaskForm):
     """병원 회원가입 폼 \n
     Field:
         `crn` : Company Registration Number, pk \n
-        `nickname` : nickname \n
         `password1` : password \n
         `password2` : verify password \n
         `name` : hospital name \n
-        `address` : hospital address \n
+        `address1` : hospital address \n
+        `address2` : hospital address \n
         `tel` : telephone number \n
+        `type` : NULL \n
     Authors: jlee (junlee9834@gmail.com)             
     """
     crn = StringField('ID(사업자등록번호)', validators=[DataRequired('값이 비었습니다.'), Length(min=11, max=11, message='사업자등록번호는 11자 입니다.')])
