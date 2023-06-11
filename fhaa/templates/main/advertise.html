@@ -5,7 +5,33 @@
     <div class="page-header">
       <h1 id="tables">내과</h1>
     </div>
+    <div class="row  row-cols-1 row-cols-md-2 g-2">
+      <div class="col">
+        <div class="card">
+          <img class="card-img-top img-fluid" src="{{ url_for('static', filename='IM-img.png') }}">
+          <!-- <svg class="card-img-top" width="100%" height="180" src="{{ url_for('static', filename='IM-img.png') }}" xmlns="http://www.w3.org/2000/svg" role="img"  preserveAspectRatio="xMidYMid slice" ><title>Placeholder</title></svg> -->
 
+          <div class="card-body">
+            <h5 class="card-title">대표증상</h5>
+            <p class="card-text">발열, 숨쉬기 힘듦, 멍이 잘듦, 소화불량, 헛배부름 느낌, 울렁거리고 구토함, 명치나 위가 아픔</p>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">병명</h5>
+            <p class="card-text">
+              <ul><b>위장질환:</b> 역류성 식도염, 기능성 위장 장애</ul>
+              <ul><b>췌장질환:</b> 급·만성 췌장염, 췌장의 낭성 종양</ul>
+              <ul><b>간질환:</b> 지방간, 간경변증, 간낭종</ul>
+              <ul><b>담도질환:</b> 담낭염, 담석증</ul>
+              <ul><b>대장질환:</b> 염증성 장질환(궤양성 대장염, 크론병), 대장염, 변비, 설사, 과민성 대장증후군</ul>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="bs-component">
       <table class="table table-hover">
         <thead>
