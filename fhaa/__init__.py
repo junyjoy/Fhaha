@@ -3,7 +3,7 @@ fhaa app
 Authors: jlee (junlee9834@gmail.com)
 """
 
-from flask import Flask # pip install flask
+from flask import Flask, render_template # pip install flask 
 from flask_migrate import Migrate # pip install flask-migrate
 from flask_sqlalchemy import SQLAlchemy # pip install flask-migrate
 from sqlalchemy import MetaData
@@ -28,6 +28,7 @@ def create_app():
     app = Flask(__name__)
     app.config.from_object(config)
     
+    app.app_context().push()
     
     # initialize connection
     # with app.app_context():

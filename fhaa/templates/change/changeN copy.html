@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="print"> {{ value }} </div>
         <div class="container">
             <div class="col-md-7 col-md-offset-2">
             <div class="page-hearder" style="padding-bottom: 20px;">
@@ -11,7 +10,7 @@
                 <table class="table table-striped row">
                     <tr>
                         <th>이름</th>
-                        <td><input class="form-control" type="text" name="subject" placeholder="{{ name }}"></td>
+                        <td><input class="form-control" type="text" name="subject" placeholder="변경할 이름"></td>
                     </tr>
                     <th>비밀번호 <br>수정</th>
                     <td><input class="form-control" type="password" name="password" placeholder="기존 비밀번호">
@@ -19,7 +18,7 @@
                     </td>
                     <tr>
                         <th>전화번호 <br>수정</th>
-                        <td><input class="form-control" type="text" name="subject" placeholder="{{ phone }}"></td>
+                        <td><input class="form-control" type="text" name="subject" placeholder="전화번호"></td>
                     </tr>
                         <td class="text-center" colspan="2"><input class="btn btn-primary" type="submit" value="수정"></td>
                     </tr>  
@@ -28,7 +27,7 @@
             </div>
             </div>
             <div class="btn-group col-md-offset-9">
-              <a href="javascript:void(0)" data-uri="{{ url_for('main.index') }}" class="btn btn-default btn-danger">회원탈퇴</a>
+              <a href="javascript:void(0)" data-uri="{{ url_for('main.index') }}" class="btn btn-default">회원탈퇴</a>
             </div>
         </div>
 {% endblock %}

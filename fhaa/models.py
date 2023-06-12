@@ -13,7 +13,7 @@ class Doctor(db.Model):
     doc_name = db.Column(db.String(20), nullable=False)
     doc_type = db.Column(db.String(20), nullable=False)
     doc_pid = db.Column(db.String(11), primary_key=True, nullable=False)
-    ill_pid = db.Column(db.String(3), primary_key=True, nullable=False)
+    ill_pid = db.Column(db.Integer, primary_key=True, nullable=False)
     sub_id = db.Column(db.Integer, primary_key=True, nullable=False)
     hos_cid = db.Column(db.String(11), primary_key=True, nullable=False)
 
@@ -78,11 +78,15 @@ class Request(db.Model):
 
 class Subject(db.Model):
     __tablename__ = 'subject'
-
-    ill_name = db.Column(db.String(20), nullable=False)
-    ill_sym = db.Column(db.String(50), nullable=False)
-    ill_pid = db.Column(db.String(3), primary_key=True)
+    
+    ill_pid = db.Column(db.Integer, primary_key=True, nullable=False)
+    ill_name = db.Column(db.String(40), nullable=False)
+    ill_sym = db.Column(db.String(100), nullable=False)
     ill_type = db.Column(db.String(20), nullable=False)
+    
+    
+def get_subjects():
+    return [(x.ill_pid, x.ill_type) for x in Subject.query.all()]
 
 
 
