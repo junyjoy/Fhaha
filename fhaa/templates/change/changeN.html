@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
+<<<<<<< HEAD
 <div class="container">
     <div class="col-md-7 col-md-offset-2">
     <div class="page-hearder" style="padding-bottom: 20px;">
@@ -30,6 +31,39 @@
         <a href="javascript:void(0)" data-uri="{{ url_for('main.index') }}" class="btn btn-default">회원탈퇴</a>
     </div>
 </div>
+=======
+<div class="print"> {{ value }} </div>
+        <div class="container">
+            <div class="col-md-7 col-md-offset-2">
+            <div class="page-hearder" style="padding-bottom: 20px;">
+                <h1>개인정보 수정(환자)</h1>
+            </div>
+            <div>
+                <form class="form-group" action="updateProcess.do" method="post">
+                <table class="table table-striped row">
+                    <tr>
+                        <th>이름</th>
+                        <td><input class="form-control" type="text" name="subject" placeholder="{{ name }}"></td>
+                    </tr>
+                    <th>비밀번호 <br>수정</th>
+                    <td><input class="form-control" type="password" name="password" placeholder="기존 비밀번호">
+                        <br><input class="form-control" type="password" name="password" placeholder="새로운 비밀번호"><input class="form-control" type="password" name="password" placeholder="새로운 비밀번호확인">
+                    </td>
+                    <tr>
+                        <th>전화번호 <br>수정</th>
+                        <td><input class="form-control" type="text" name="subject" placeholder="{{ phone }}"></td>
+                    </tr>
+                        <td class="text-center" colspan="2"><input class="btn btn-primary" type="submit" value="수정"></td>
+                    </tr>  
+                </table>
+            </form>
+            </div>
+            </div>
+            <div class="btn-group col-md-offset-9">
+              <a href="javascript:void(0)" data-uri="{{ url_for('main.index') }}" class="btn btn-default">회원탈퇴</a>
+            </div>
+        </div>
+>>>>>>> b1789bfc91f650ee97c5d542f9d9cec8e100fa20
 {% endblock %}
             
 {% block script %}
