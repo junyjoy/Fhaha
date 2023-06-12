@@ -31,9 +31,10 @@
       </div>
     </div>
     <div class="bs-component">
-      <table class="table table-hover">
+      <table class="table table-hover mt-3">
         <thead>
           <tr>
+            <th scope="col"> </th>
             <th scope="col">병원이름</th>
             <th scope="col">주소</th>
             <th scope="col">전화번호</th>
@@ -43,10 +44,10 @@
         <tbody>
           {%for hos in hoslist%}
           <tr class="table-secondary"> 
+            <td> <span class="badge rounded-pill bg-info">추천</span></td>
             <td> {{hos.hos_name}}</td>
-            <td> {{hos.hos_tel}}</td>
             <td> {{ (hos.hos_addr.replace(';block;', ", ")) }}</td>
-          </tr>
+            <td> {{hos.hos_tel}}</td>
           {%endfor%}
         </tbody>
       </table>
