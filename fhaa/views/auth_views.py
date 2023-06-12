@@ -34,10 +34,13 @@ def patient_signup():
                 
                 db.session.add(user)
                 db.session.commit()
+                
                 return redirect(url_for('auth.congrats', _method='POST',user_id=user.pat_ema, user_name=user.pat_name))
             else:
                 flash('이미 존재하는 사용자입니다.')
+                
         return render_template('auth/patient_signup.html', form=form)
+    
     else:
         return redirect(url_for('main.index'))
     
@@ -58,22 +61,21 @@ def hospital_signup():
                             hos_tel=form.tel.data,
                             hos_type=form.type.data
                         )
-                
                 db.session.add(user)
                 db.session.commit()
                 
                 for ill_pid in form.subject.data:
                     hossub = HosSub(hos_cid=user.hos_cid, ill_pid=ill_pid)
-                
-                db.session.add(hossub)
-                db.session.commit()
+                    db.session.add(hossub)
+                    db.session.commit()
+                    
                 # 가입완료 페이지에서 id와 name을 표시하기 위함
-                session['created_id'] = form.crn.data
-                session['created_name'] = form.name.data
                 return redirect(url_for('auth.congrats', user_id=user.hos_cid, user_name=user.hos_name))
             else:
                 flash('이미 존재하는 사용자입니다.')
+                
         return render_template('auth/hospital_signup.html', form=form)
+    
     else:
         return redirect(url_for('main.index'))
 
@@ -91,12 +93,6 @@ def congrats():
 
 def login_required(view):
     """로그인 후 이용할 수 있는 서비스에 사용됨
-
-    Args:
-        view (_type_): _description_
-
-    Returns:
-        _type_: _description_
     """
     @functools.wraps(view)
     def wrapped_view(*args, **kwargs):

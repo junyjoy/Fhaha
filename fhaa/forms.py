@@ -41,6 +41,7 @@ class MultiCheckboxField(SelectMultipleField):
     widget = widgets.ListWidget(html_tag='ol', prefix_label=False)
     option_widget = widgets.CheckboxInput()
 
+
 class MultiCheckboxAtLeastOne():
     def __init__(self, message=None):
         if not message:
