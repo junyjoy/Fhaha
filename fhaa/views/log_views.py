@@ -8,9 +8,11 @@ from fhaa.models import User, Hospital
 
 bp = Blueprint('login',__name__,url_prefix='/login')
 
+
 @bp.route('/', methods=('GET','POST'))
 def login():
     return render_template('log/login.html')
+
 
 @bp.route('/pat/', methods=('GET','POST'))
 def pat_login():
@@ -30,6 +32,7 @@ def pat_login():
         flash(error)
     return render_template('log/pat_login.html', form=form)
 
+
 @bp.route('/hos/', methods=('GET','POST'))
 def hos_login():
     form = HospitalLoginForm()
@@ -38,7 +41,7 @@ def hos_login():
         user = Hospital.query.filter_by(hos_cid=form.crn.data).first()
         if not user:
             error = "존재하지 않는 사용자임 ㅋㅋ"
-        elif not check_password_hash(user.password, form.password.data):
+        elif not check_password_hash(user.hos_pwd, form.password.data):
             error = "비밀번호 틀렸음 ㅋㅋ"
         if error is None:
             session.clear()
@@ -54,13 +57,39 @@ def logout():
     session.clear()
     return redirect(url_for('main.index'))
 
+
+# @bp.before_app_request
+# def load_logged_in_user():
+#     user_id = session.get('user_id')
+#     user_type = session.get('user_type')
+#     if user_id is None:
+#         g.user = None
+#         g.user_type = None
+#     elif user_type == "patient":
+#         g.user = User.query.get(user_id)
+#         g.user_type = user_type
+#         g.user_name = g.user.pat_name
+#     elif user_type == "patient":
+#         g.user = User.query.get(user_id)
+#         g.user_type = user_type
+#         g.user_name = g.user.pat_name
+    
+        
+
 @bp.before_app_request
 def load_logged_in_user():
     user_id = session.get('user_id')
     user_type = session.get('user_type')
+    
     if user_id is None:
         g.user = None
         g.user_type = None
     else:
-        g.user = User.query.get(user_id)
-        g.user_type = User.query.get(user_type)
+        g.user_type = user_type
+        if user_type == 'patient':
+            g.user = User.query.get(user_id)            
+            g.user_name = g.user.pat_name
+            
+        elif user_type == 'hospital':
+            g.user = Hospital.query.get(user_id)
+            g.user_name = g.user.hos_name
