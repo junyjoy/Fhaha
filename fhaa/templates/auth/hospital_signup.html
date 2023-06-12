@@ -43,7 +43,23 @@
         </div> -->
         <div class="mb-3">
             <label class="mb-2" for="type">의료종목</label>
-            {{ form.subject() }}
+            <!-- <table class="table">
+                <tr>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>@mdo</td>
+                </tr>
+            </table> -->
+            <ul class="list-group">
+            {% for s in form.subject.choices %}
+                <li class="list-group">
+                    <div>
+                    <input class="form-check-input id='subject-{{form.subject.choices.index(s)}}'" name="subject" type="checkbox" value="{{s[0]}}">
+                    <label class="form-check-label" for="subject">{{s[1]}}</label>
+                    </div>
+                </li>
+            {% endfor %}
+            </ul>
         </div>
         <div class="mt-5  mb-3">
             <button button type="submit" class="btn btn-primary">회원가입</button>
