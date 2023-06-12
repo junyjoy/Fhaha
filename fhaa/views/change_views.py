@@ -9,7 +9,7 @@ from fhaa import db
 from fhaa.models import User
 
 
-bp = Blueprint('change', __name__, url_prefix='/change')
+bp = Blueprint('change', __name__, url_prefix='/')
 app = Flask(__name__)
 
 @bp.route('/change')

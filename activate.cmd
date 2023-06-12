@@ -5,4 +5,4 @@ set FLASK_APP=fhaa
 set FLASK_DEBUG=true
 
 @REM venv activate
-C:\venvs\myproject\Scriptsactivate
+C:\venvs\myproject\Scripts\activate
