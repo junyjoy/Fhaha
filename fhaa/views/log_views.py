@@ -4,7 +4,7 @@ from werkzeug.utils import redirect
 
 from fhaa import db
 from fhaa.forms import UserLoginForm, HospitalLoginForm
-from fhaa.models import User, Hospital
+from fhaa.models import User, Hospital, Subject
 
 bp = Blueprint('login',__name__,url_prefix='/login')
 

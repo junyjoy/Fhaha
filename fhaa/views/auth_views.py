@@ -5,7 +5,7 @@ Authors: jlee (junlee9834@gmail.com)
 
 from flask import Blueprint, render_template, request, url_for, session, g, flash
 from fhaa.forms import UserCreateForm, HospitalCreateForm
-from fhaa.models import User, Hospital
+from fhaa.models import User, Hospital, HosSub, Subject
 from fhaa import db
 from werkzeug.utils import redirect
 from werkzeug.security import generate_password_hash
@@ -50,14 +50,22 @@ def hospital_signup():
         if request.method == 'POST' and form.validate_on_submit() and g.user is None: 
             user = Hospital.query.filter_by(hos_cid=form.crn.data).first()
             if not user:
-                print(form.address1.data + form.address2.data)
-                user = Hospital(hos_cid=form.crn.data,
+                user = Hospital(
+                            hos_cid=form.crn.data,
                             hos_pwd=generate_password_hash(form.password1.data),
                             hos_name=form.name.data,
-                            hos_addr=form.address1.data + ', ' + form.address2.data,
+                            hos_addr=form.address1.data + ';block;' + form.address2.data,
                             hos_tel=form.tel.data,
-                            hos_type=form.type.data)
+                            hos_type=form.type.data
+                        )
+                
                 db.session.add(user)
+                db.session.commit()
+                
+                for ill_pid in form.subject.data:
+                    hossub = HosSub(hos_cid=user.hos_cid, ill_pid=ill_pid)
+                
+                db.session.add(hossub)
                 db.session.commit()
                 # 가입완료 페이지에서 id와 name을 표시하기 위함
                 session['created_id'] = form.crn.data
