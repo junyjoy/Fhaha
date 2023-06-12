@@ -6,7 +6,7 @@
         <h3 class="text-center">회원가입이 완료되었습니다.</h3>
     </div>
 
-    <table class="table w-50 mt-5">
+    <table class="table w-25 mt-5">
         <tbody>
             <tr class="table-light">
                 <th scope="row">ID</th>
@@ -19,9 +19,9 @@
         </tbody>
     </table>
 
-    <div class="container d-flex flex-row justify-content-center mt-5" >
-        <button type="button" class="btn btn-primary m-1">메인페이지</button>
-        <button type="button" class="btn btn-primary m-1">로그인</button>
+    <div class="container d-flex flex-row justify-content-center mt-5 w-25" >
+        <a href="{{ url_for('main.index') }}" class="btn btn-primary m-1 w-50">메인페이지</a>
+        <a href="{{ url_for('login.login') }}" class="btn btn-primary m-1 w-50">로그인</a>
     </div>
 </div>
 {% endblock %}

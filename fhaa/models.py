@@ -32,7 +32,6 @@ class HosSub(db.Model):
     subject = db.relationship('Subject', primaryjoin='HosSub.ill_pid == Subject.ill_pid', backref='hos_subs')
 
 
-
 class Hospital(db.Model):
     __tablename__ = 'hospital'
 
@@ -41,7 +40,6 @@ class Hospital(db.Model):
     hos_addr = db.Column(db.String(80), nullable=False)
     hos_cid = db.Column(db.String(11), primary_key=True)
     hos_pwd = db.Column(db.String(102), nullable=False)
-    hos_type = db.Column(db.String(20), nullable=False)
 
 
 

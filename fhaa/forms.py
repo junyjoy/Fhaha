@@ -38,7 +38,7 @@ class UserCreateForm(FlaskForm):
     
 
 class MultiCheckboxField(SelectMultipleField):
-    widget = widgets.ListWidget(html_tag='ol', prefix_label=False)
+    widget = widgets.ListWidget(html_tag='ul', prefix_label=False)
     option_widget = widgets.CheckboxInput()
 
 
@@ -69,7 +69,7 @@ class HospitalCreateForm(FlaskForm):
     Authors: jlee (junlee9834@gmail.com)             
     """
         
-    crn = StringField('ID(사업자등록번호)', validators=[DataRequired('값이 비었습니다.'), Length(min=11, max=11, message='사업자등록번호는 11자 입니다.')])
+    crn = StringField('ID(사업자등록번호)', validators=[DataRequired('값이 비었습니다.'), Length(min=10, max=10, message='사업자등록번호는 10자 입니다.')])
     password1 = PasswordField('비밀번호', validators=[DataRequired('값이 비었습니다.'), EqualTo('password2', '비밀번호가 일치하지 않습니다.')])
     password2 = PasswordField('비밀번호확인', validators=[DataRequired('값이 비었습니다.')])
     name = StringField('병원명', validators=[DataRequired('값이 비었습니다.'), Length(min=2, max=100)])
@@ -80,7 +80,6 @@ class HospitalCreateForm(FlaskForm):
     type = StringField('', default='')
     
     subject = MultiCheckboxField('진료과목', choices=[(x.ill_pid, x.ill_type) for x in Subject.query.all()], validators=[MultiCheckboxAtLeastOne()], coerce=int)
-    
     
 
 class UserLoginForm(FlaskForm):
