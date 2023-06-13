@@ -7,7 +7,7 @@ from werkzeug.utils import redirect
 from fhaa import db
 from fhaa.forms import UserUpdateForm, HospitalUpdateForm
 from fhaa.models import User, Hospital, HosSub
-from fhaa.views.auth_views import login_required_for_patient
+from fhaa.views.auth_views import login_required_for_patient, login_required_all
 
 bp = Blueprint('change', __name__, url_prefix='/change')
 
@@ -108,3 +108,24 @@ def change_hospital():
     
     return render_template('change/changeH.html', form=form, subjects=subjects)
     
+@bp.route('/signout/')
+@login_required_all
+def signout():
+    user_type = session.get('user_type')
+    if user_type == "patient": # 일반 사용자
+        return redirect(url_for('change.signout_patient'))
+    
+    elif user_type == "hospital": # 병원 
+        return redirect(url_for('change.signout_hospital'))
+    
+@bp.route('/signout/patient/')
+@login_required_all
+def signout_patient():
+    db.session.delete(User.query.filter_by(pat_ema=g.user.pat_ema).first())
+    db.session.commit()
+    return redirect(url_for('log.logout'))
+
+@bp.route('/signout/hospital/')
+@login_required_all
+def signout_hospital():
+    return redirect(url_for('main.index'))
