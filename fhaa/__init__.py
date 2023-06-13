@@ -54,11 +54,11 @@ def create_app():
     
     
     # Blueprint
-    from .views import main_views, auth_views, log_views, change_views
+    from .views import main_views, auth_views, log_views, change_views, request_views
     app.register_blueprint(main_views.bp)
     app.register_blueprint(auth_views.bp)
     app.register_blueprint(log_views.bp)
     app.register_blueprint(change_views.bp)
-    
+    app.register_blueprint(request_views.bp)
     
     return app
