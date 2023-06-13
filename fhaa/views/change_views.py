@@ -35,7 +35,6 @@ def change_patient():
         if check_password_hash(user.first().pat_pw, form.old_password.data):
             # 새로운 비밀번호가 존재할 경우 그 비밀번호로 변경
             if form.new_password1.data:
-                print("1")
                 user.update(dict(
                         pat_name=form.name.data, 
                         pat_pw=generate_password_hash(form.new_password1.data),
@@ -43,7 +42,6 @@ def change_patient():
                         ))
             # 새로운 비밀번호가 존재하지 않을 경우 기존 비밀번호를 다시 넣음
             else:
-                print("2")
                 user.update(dict(
                         pat_name=form.name.data, 
                         pat_pw=generate_password_hash(form.old_password.data),
@@ -75,23 +73,33 @@ def change_hospital():
         
         if check_password_hash(user.first().hos_pwd, form.old_password.data):
             
-            for ill_pid in form.subject.data:
-                del_hossub = HosSub.query.filter_by(ill_pid=ill_pid).first()
-                print(del_hossub)
-                db.session.delete(del_hossub)
+            # 새로운 비밀번호가 존재할 경우 그 비밀번호로 변경
+            if form.new_password1.data:
+                user.update(dict(
+                        hos_name=form.name.data, 
+                        hos_addr=form.address1.data + ';block;' + form.address2.data,
+                        hos_pwd=generate_password_hash(form.new_password1.data),
+                        hos_tel=form.tel.data
+                        ))
+                
+            # 새로운 비밀번호가 존재하지 않을 경우 기존 비밀번호를 다시 넣음
+            else:
+                user.update(dict(
+                        hos_name=form.name.data, 
+                        hos_addr=form.address1.data + ';block;' + form.address2.data,
+                        hos_pwd=generate_password_hash(form.old_password.data),
+                        hos_tel=form.tel.data
+                        ))
+                
+            for del_hossub in HosSub.query.filter_by(hos_cid=user.first().hos_cid).all():
+                if type(del_hossub) is HosSub:
+                    db.session.delete(del_hossub)
                 
             for ill_pid in form.subject.data:
                 add_hossub = HosSub(hos_cid=user.first().hos_cid, ill_pid=ill_pid)
                 db.session.add(add_hossub)
-            
-            user.update(dict(
-                    hos_name=form.name.data, 
-                    hos_addr=form.address1.data + ';block;' + form.address2.data,
-                    hos_pwd=generate_password_hash(form.new_password1.data),
-                    hos_tel=form.tel.data
-                    ))
+                
             db.session.add(user.first())
-            
             db.session.commit()
         else:
             flash('비밀번호 틀림ㅋㅋ')
