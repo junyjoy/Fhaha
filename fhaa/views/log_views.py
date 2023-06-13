@@ -81,13 +81,13 @@ def load_logged_in_user():
     user_id = session.get('user_id')
     user_type = session.get('user_type')
     
-    if user_id is None:
+    if user_id is None or user_type is None:
         g.user = None
         g.user_type = None
     else:
         g.user_type = user_type
         if user_type == 'patient':
-            g.user = User.query.get(user_id)            
+            g.user = User.query.get(user_id)         
             g.user_name = g.user.pat_name
             
         elif user_type == 'hospital':
