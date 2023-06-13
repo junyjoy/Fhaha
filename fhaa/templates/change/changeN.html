@@ -6,19 +6,23 @@
                 <h1>개인정보 수정(환자)</h1>
             </div>
             <div>
-                <form class="form-group" action="updateProcess.do" method="post">
+                <form class="form-group" action="/change" method="post">
                 <table class="table table-striped row">
                     <tr>
                         <th>이름</th>
-                        <td><input class="form-control" type="text" name="subject" placeholder="{{ name }}"></td>
+                        <td>
+                            <input class="form-control" type="text" name="subject" value="{{ form.name.data }}" >
+                        </td>
                     </tr>
                     <th>비밀번호 <br>수정</th>
-                    <td><input class="form-control" type="password" name="password" placeholder="기존 비밀번호">
-                        <br><input class="form-control" type="password" name="password" placeholder="새로운 비밀번호">{{ password1 }}<input class="form-control" type="password" name="password" placeholder="새로운 비밀번호확인">{{ password2 }}
+                    <td>
+                        <input class="form-control mb-1" type="password" name="password" placeholder="기존 비밀번호" id="InputPassword1" value="{{ form.password2.data or '' }}">
+                        <input class="form-control" type="password" name="password" placeholder="새로운 비밀번호" value="{{ form.password2.data or '' }}">
+                        <input class="form-control" type="password" name="password" placeholder="새로운 비밀번호확인">{{ password2 }}
                     </td>
                     <tr>
                         <th>전화번호 <br>수정</th>
-                        <td><input class="form-control" type="text" name="subject" placeholder="{{ phone }}"></td>
+                        <td><input class="form-control" type="text" name="subject" placeholder="{{ form.phone.data }}"></td>
                     </tr>
                         <td class="text-center" colspan="2"><input class="btn btn-primary" type="submit" value="수정"></td>
                     </tr>  
@@ -32,6 +36,12 @@
         </div>
 {% endblock %}
             
+{% block style %}
+.hidden {
+    
+}
+{% endblock %}
+
 {% block script %}
 <script type='text/javascript'>
     const delete_elements = document.getElementsByClassName("secession");
