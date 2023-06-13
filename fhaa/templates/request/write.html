@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% block content %}
+#<!DOCTYPE html>
+#<html lang="ko">
+#<head>
+#    <meta charset="UTF-8">
+#    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+#    <title>의뢰 요청 페이지</title>
+#    <link rel="stylesheet" href="css/css.css">
+#</head>
+<body>
+    <div class="board_wrap">
+        <div class="board_title">
+            <strong>진료의뢰 요청</strong>
+            <p>환자의 정보를 정확하게 입력해주세요.</p>
+        </div>
+        <div class="board_write_wrap">
+            <div class="board_write">
+                <div class="title">
+                    <dl>
+                        <dt>제목</dt>
+                        <dd><input type="text" placeholder="제목 입력"></dd>
+                    </dl>
+                </div>
+                <div class="info">
+                    <dl>
+                        <dt>글쓴이</dt>
+                        <dd><input type="text" placeholder="글쓴이 입력"></dd>
+                    </dl>
+                    <dl>
+                        <dt>비밀번호</dt>
+                        <dd><input type="password" placeholder="비밀번호 입력"></dd>
+                    </dl>
+                </div>
+                <div class="cont">
+                   
+        <label>희망 시간</label>
+        <div>
+            <input type="radio" value="10" /> 10분 내외
+            <input type="radio" value="30" /> 30분 내외
+            <input type="radio" value="60" /> 60분 내외
+        </div> <br>
+
+        <div>
+            <label>위치</label>
+        </div>
+            <input type="text" placeholder="현재 주소를 입력해주세요.">    
+
+        
+
+        <div> <br>
+            <div>
+                <label>진료 과목</label>
+            </div>
+            
+            <select>진료과목
+                <option>내과</option>
+                <option>피부과</option>
+                <option>산부인과</option>
+                <option>가정의학과</option>
+                <option>이비인후과</option>
+                <option>비뇨기과</option>
+                <option>소아청소년과</option>
+                <option>정형외과</option>
+                <option>치과</option>
+                <option>안과</option>
+                <option>신경과</option>
+            </select>
+        
+        </div> <br>
+
+        <div>
+            요청사항(선택)
+        </div>
+        
+            
+        <input type="text" placeholder="요청사항을 입력해주세요.">    
+    
+        </div>
+
+    </div>
+    
+
+
+
+
+                    
+                </div>
+            </div>
+            <div class="bt_wrap">
+                <a href="view.html" class="on">등록</a>
+                <a href="list.html">취소</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
