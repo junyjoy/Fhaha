@@ -6,11 +6,11 @@ app = Flask(__name__)
 
 @bp.route('/list')
 def _list():
-    return render_template('request/_list.html')
+    return render_template('request/list.html')
     
 @bp.route('/view')
 def views():
-    return render_template('request/views.html')
+    return render_template('request/view.html')
     
 @bp.route('/write')
 def write():
