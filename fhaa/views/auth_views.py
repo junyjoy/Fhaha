@@ -36,6 +36,7 @@ def patient_signup():
                             pat_bir=form.birth.data)
                 
                 db.session.add(user)
+            
                 db.session.commit()
                 
                 return redirect(url_for('auth.congrats', user_id=form.email.data, user_name=form.name.data), code=307)
