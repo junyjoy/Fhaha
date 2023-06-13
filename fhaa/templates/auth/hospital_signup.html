@@ -37,19 +37,8 @@
             <label for="tel">전화번호</label>
             <input type="text" class="form-control" name="tel" id="tel" value="{{ form.tel.data or '' }}" />
         </div>
-        <!-- <div class="mb-3">
-            <label for="type">의료종목</label>
-            <select class="form-control" name="type" id="type"></select>
-        </div> -->
         <div class="mb-3">
             <label class="mb-2" for="type">의료종목</label>
-            <!-- <table class="table">
-                <tr>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                </tr>
-            </table> -->
             <ul class="list-group">
             {% for s in form.subject.choices %}
                 <li class="list-group">
