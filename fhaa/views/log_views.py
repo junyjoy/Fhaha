@@ -88,8 +88,8 @@ def load_logged_in_user():
         g.user_type = user_type
         if user_type == 'patient':
             g.user = User.query.get(user_id)         
-            g.user_name = g.user.pat_name
+            # g.user_name = g.user.pat_name
             
         elif user_type == 'hospital':
             g.user = Hospital.query.get(user_id)
-            g.user_name = g.user.hos_name
+            # g.user_name = g.user.hos_name

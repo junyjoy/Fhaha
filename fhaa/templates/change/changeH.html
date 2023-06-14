@@ -1,35 +1,40 @@
 {% extends "base.html" %}
 {% block content %}
-        <div class="container" style="margin-top: 7rem;">
-            <div class="col-md-7 col-md-offset-2">
+        <div class="container w-50" style="margin-top: 7rem;">
+            <div class=" w-100 col-md-7 col-md-offset-2">
             <div class="page-hearder" style="padding-bottom: 20px;">
-                <h1>개인정보 수정(병원)</h1>
+                <h3>개인정보 수정(병원)</h3>
             </div>
             <div>
                 <form class="form-group gap-3" method="post">
                 {{ form.csrf_token }}
                 {% include "form_errors.html" %}
                 <table class="table table-striped row">
-                    <tr>
+                    <tr class="d-flex flex-column">
                         <th>병원 위치</th>
                         <td>
-                            <input class="form-control mb-1" type="text" id="address1" name="address1" value="{{ form.address1.data or '' }}">
-                            <input type="button" class="btn btn-primary" onclick="execDaumPostcode()" value="주소 검색"><br>
+                            <div class="d-flex">
+                                <input class="form-control" type="text" id="address1" name="address1" value="{{ form.address1.data or '' }}">
+                                <input type="button" class="btn btn-primary" onclick="execDaumPostcode()" value="주소 검색"><br>
+                            </div>
                             <input class="form-control" type="text" name="address2" value="{{ form.address2.data or '' }}">
                         </td>
                     </tr>
-                    <th>비밀번호 <br>수정</th>
-                    <td><input class="form-control" type="password" name="old_password" placeholder="기존 비밀번호">
-                        <br><input class="form-control mb-1" type="password" name="new_password1" placeholder="새로운 비밀번호">
-                        <input class="form-control" type="password" name="new_password2" placeholder="새로운 비밀번호확인">
-                    </td>
-                    <tr>
-                        <th>전화번호 <br>수정</th>
+                    <tr class="d-flex flex-column">
+                        <th>비밀번호 수정</th>
+                        <td>
+                            <input class="form-control mb-3" type="password" name="old_password" placeholder="기존 비밀번호">
+                            <input class="form-control mb-1" type="password" name="new_password1" placeholder="새로운 비밀번호">
+                            <input class="form-control" type="password" name="new_password2" placeholder="새로운 비밀번호확인">
+                        </td>
+                    </tr>
+                    <tr class="d-flex flex-column">
+                        <th>전화번호 수정</th>
                         <td><input class="form-control" type="text" name="tel" value="{{ form.tel.data or '' }}"></td>
                     </tr>
                     <div class="form-check">
-                    <tr>
-                        <th>의료종목 <br>수정</th>
+                    <tr class="d-flex flex-column">
+                        <th>의료종목 수정</th>
                         <td>
                             <ul class="list-group">
                             {% for s in form.subject.choices %}
@@ -46,21 +51,28 @@
                                 </div>
                             </li>
                             {% endfor %}
-                            
 
                         </ul>
                         </td>
                     </tr>
                     </div>
-                        <td class="text-center" colspan="2"><input class="btn btn-primary" type="submit" value="수정"></td>
-                    </tr>  
+                    <tr class="d-flex flex-column"> 
+                        <td class="text-center" colspan="2">
+                            <input class="btn btn-primary w-25" type="submit" value="수정">
+                        </td>
+                    </tr>    
                 </table>
             </form>
             </div>
             </div>
-            <div class="btn-group col-md-offset-9">
-              <a href="javascript:void(0)" data-uri="{{ url_for('change.signout') }}" class="delete btn btn-default btn-danger">회원탈퇴</a>
-            </div>          
+
+            <div class="mb-3">
+                <form method='POST'> 
+                    <div class="btn-group col-md-offset-9">
+                        <a href="javascript:void(0)" data-uri="{{ url_for('change.signout') }}" class="secession delete btn btn-default btn-danger">회원탈퇴</a>
+                    </div>
+                </form>
+            </div>
         </div>
 {% endblock %}
 

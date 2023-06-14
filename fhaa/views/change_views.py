@@ -5,7 +5,7 @@ from flask import Blueprint, url_for, render_template, flash, request, session, 
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import redirect
 from fhaa import db
-from fhaa.forms import UserUpdateForm, HospitalUpdateForm
+from fhaa.forms import UserUpdateForm, HospitalUpdateForm, UserDeleteForm, HospitalDeleteForm
 from fhaa.models import User, Hospital, HosSub
 from fhaa.views.auth_views import login_required_for_patient, login_required_all
 
@@ -122,12 +122,23 @@ def signout():
 @bp.route('/signout/patient/')
 @login_required_all
 def signout_patient():
-    db.session.delete(User.query.filter_by(pat_ema=g.user.pat_ema).first())
+    print(session.get('user_id'))
+    db.session.delete(User.query.filter_by(pat_ema=session.get('user_id')).first())
     db.session.commit()
-    return redirect(url_for('log.logout'))
+    return redirect(url_for('login.logout'))
 
 
 @bp.route('/signout/hospital/')
 @login_required_all
 def signout_hospital():
+    user = Hospital.query.filter_by(hos_cid=g.user.hos_cid)
+    
+    print(session.get('user_id'))
+    for del_hossub in HosSub.query.filter_by(hos_cid=user.first().hos_cid).all():
+        if type(del_hossub) is HosSub:
+            db.session.delete(del_hossub)
+        
+    db.session.delete(Hospital.query.filter_by(hos_cid=session.get('user_id')).first())
+    db.session.commit() 
+        
     return redirect(url_for('main.index'))
