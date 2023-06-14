@@ -21,10 +21,6 @@ if (navigator.geolocation) {
         var lat = position.coords.latitude, // 위도
             lon = position.coords.longitude; // 경도
         
-        console.log(lat,lon)
-        document.getElementById('location_lat').value = toString(lat);
-        document.getElementById('location_lon').value = toString(lon);
-        
         var locPosition = new kakao.maps.LatLng(lat, lon) // 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성합니다
         
         // 마커와 인포윈도우를 표시합니다
@@ -48,7 +44,8 @@ function displayMarker(locPosition) {
         clickable: true // 마커를 클릭했을 때 지도의 클릭 이벤트가 발생하지 않도록 설정합니다
     }); 
 
-    marker.setMap(map)
+    marker.setMap(map);
+    get_location();
     
     // 지도 중심좌표를 접속위치로 변경합니다
     map.setCenter(locPosition);      
@@ -78,6 +75,7 @@ function addMarker(position) {
 
     // // 마커가 지도 위에 표시되도록 설정합니다
     marker.setMap(map);
+    get_location();
 
     // locatin input에 표시
     searchDetailAddrFromCoords(position, function (result, status) {
@@ -126,9 +124,15 @@ function setLocation() {
                 position: coords
             });
 
-
             // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
             map.setCenter(coords);
+            get_location();
         } 
     });    
+}
+
+function get_location() {
+    x = document.getElementById('location_lon').value = marker.getPosition()['La'];
+    y = document.getElementById('location_lat').value = marker.getPosition()['Ma'];
+    return x, y;
 }
