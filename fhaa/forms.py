@@ -151,4 +151,3 @@ class HospitalDeleteForm(FlaskForm):
     """
     crn = StringField('사업자등록번호', validators=[DataRequired(), Length(min=9, max=50)])
     password = PasswordField('비밀번호', validators=[DataRequired('값이 비었습니다.'),Length(min=4)])
-=======
