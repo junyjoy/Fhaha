@@ -1,43 +1,53 @@
 {% extends "base.html" %}
 {% block content %}
-        <div class="container" style="margin-top: 7rem;">
-            <div class="col-md-7 col-md-offset-2">
-            <div class="page-hearder" style="padding-bottom: 20px;">
-                <h1>개인정보 수정(환자)</h1>
-            </div>
-            <div>
-                <form class="form-group" method="POST">
+<div class="container w-50" style="margin-top: 7rem;">
+    <div class=" w-100 col-md-7 col-md-offset-2">
+
+        <div class="page-hearder" style="padding-bottom: 20px;">
+            <h3>개인정보 수정(환자)</h3>
+        </div>
+
+        <div class="container">
+            <form class="form-group" method="POST">
                 {{ form.csrf_token }}
                 {% include "form_errors.html" %}
                 <table class="table table-striped row">
-                    <tr>
-                        <th>이름</th>
+                    <tr class="d-flex flex-column">
+                        <th >이름</th>
                         <td>
                             <input class="form-control" type="text" name="subject" value="{{ form.name.data }}" >
                         </td>
                     </tr>
-                    <th>비밀번호 <br>수정</th>
-                    <td>
-                        <input class="form-control mb-1" type="password" name="old_password" placeholder="기존 비밀번호" id="InputPassword1" value="{{ form.old_password.data or '' }}">
-                        <input class="form-control" type="password" name="new_password1" placeholder="새로운 비밀번호" value="{{ form.new_password1.data or '' }}">
-                        <input class="form-control" type="password" name="new_password2" placeholder="새로운 비밀번호확인" value="{{ form.new_password2.data or '' }}">
-                    </td>
-                    <tr>
-                        <th>전화번호 <br>수정</th>
+                    <tr class="d-flex flex-column">
+                        <th>비밀번호 수정</th>
+                        <td>
+                            <input class="form-control mb-1" type="password" name="old_password" placeholder="기존 비밀번호" id="InputPassword1" value="{{ form.old_password.data or '' }}">
+                            <input class="form-control" type="password" name="new_password1" placeholder="새로운 비밀번호" value="{{ form.new_password1.data or '' }}">
+                            <input class="form-control" type="password" name="new_password2" placeholder="새로운 비밀번호 확인" value="{{ form.new_password2.data or '' }}">
+                        </td>
+                    </tr>
+                    <tr class="d-flex flex-column">
+                        <th>전화번호 수정</th>
                         <td><input class="form-control" type="text" name="phone" value="{{ form.phone.data }}"></td>
                     </tr>
-                        <td class="text-center" colspan="2"><input class="btn btn-primary" type="submit" value="수정"></td>
+                    <tr class="d-flex flex-column"> 
+                        <td class="text-center" colspan="2">
+                            <input class="btn btn-primary w-25" type="submit" value="수정">
+                        </td>
                     </tr>  
                 </table>
             </form>
-            </div>
-            </div>
-            <form method='POST'> 
-            <div class="btn-group col-md-offset-9">
-              <a href="javascript:void(0)" data-uri="{{ url_for('change.signout') }}" class="secession delete btn btn-default btn-danger">회원탈퇴</a>
-            </div>
-            </form>
         </div>
+    </div>
+
+    <div class="mb-3">
+        <form method='POST'> 
+            <div class="btn-group col-md-offset-9">
+                <a href="javascript:void(0)" data-uri="{{ url_for('change.signout') }}" class="secession delete btn btn-default btn-danger">회원탈퇴</a>
+            </div>
+        </form>
+    </div>
+</div>
 {% endblock %}
             
 {% block style %}
