@@ -81,18 +81,11 @@ class HospitalCreateForm(FlaskForm):
 
 class UserLoginForm(FlaskForm):
     email = EmailField('사용자이메일', validators=[DataRequired(), Length(min=9, max=50)])
-<<<<<<< HEAD
-    password = PasswordField('비밀번호', validators=[DataRequired('값이 비었습니다.')])
-=======
     password = PasswordField('비밀번호', validators=[DataRequired('값이 비었습니다.'),Length(min=4)])
->>>>>>> a28addf9365417936fc8330b10dccab5cb638dcf
     
 
 class HospitalLoginForm(FlaskForm):
     crn = StringField('사업자등록번호', validators=[DataRequired(), Length(min=9, max=50)])
-<<<<<<< HEAD
-    password = PasswordField('비밀번호', validators=[DataRequired('값이 비었습니다.')])
-=======
     password = PasswordField('비밀번호', validators=[DataRequired('값이 비었습니다.'),Length(min=4)])
     
     
@@ -139,4 +132,3 @@ class HospitalUpdateForm(FlaskForm):
     tel = StringField('전화번호', validators=[DataRequired('값이 비었습니다.'), Length(min=9, max=11)])
     subject = MultiCheckboxField('진료과목', choices=[(x.ill_pid, x.ill_type) for x in Subject.query.all()], validators=[MultiCheckboxAtLeastOne()], coerce=int)
     
->>>>>>> a28addf9365417936fc8330b10dccab5cb638dcf
