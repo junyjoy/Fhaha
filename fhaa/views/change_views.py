@@ -59,7 +59,6 @@ def change_patient():
     
 
     
-    
 @bp.route('/hospital/', methods=['GET', 'POST'])
 def change_hospital():
     
@@ -108,6 +107,7 @@ def change_hospital():
     
     return render_template('change/changeH.html', form=form, subjects=subjects)
     
+    
 @bp.route('/signout/')
 @login_required_all
 def signout():
@@ -118,12 +118,14 @@ def signout():
     elif user_type == "hospital": # 병원 
         return redirect(url_for('change.signout_hospital'))
     
+    
 @bp.route('/signout/patient/')
 @login_required_all
 def signout_patient():
     db.session.delete(User.query.filter_by(pat_ema=g.user.pat_ema).first())
     db.session.commit()
     return redirect(url_for('log.logout'))
+
 
 @bp.route('/signout/hospital/')
 @login_required_all
