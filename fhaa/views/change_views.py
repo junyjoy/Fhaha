@@ -5,78 +5,127 @@ from flask import Blueprint, url_for, render_template, flash, request, session, 
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import redirect
 from fhaa import db
-from fhaa.forms import UserCreateForm
-from fhaa.models import User
+from fhaa.forms import UserUpdateForm, HospitalUpdateForm
+from fhaa.models import User, Hospital, HosSub
+from fhaa.views.auth_views import login_required_for_patient, login_required_all
 
+bp = Blueprint('change', __name__, url_prefix='/change')
 
-bp = Blueprint('change', __name__, url_prefix='/')
-app = Flask(__name__)
-
-@bp.route('/change', methods=['GET'])
-def change_get():
-    
+@bp.route('/')
+def change():
     user_type = session.get('user_type')
-
     if user_type == "patient": # 일반 사용자 로그인
-        # user = User.query.get(g.user_id)
-        form = UserCreateForm(email=g.user.pat_ema, name=g.user.pat_name, phone=g.user.pat_tel, birth=g.user.pat_bir)
-        print(form.birth.data)
-        return render_template('change/changeN.html', form=form)
-            
-
+        return redirect(url_for('change.change_patient'))
+    
     elif user_type == "hospital": # 병원 로그인
-        return render_template('change/changeH.html')
+        return redirect(url_for('change.change_hospital'))
+        
+        
+        
 
-    # else:
-    #     return redirect(url_for('main.index'))
+@bp.route('/patient/', methods=['GET', 'POST'])
+@login_required_for_patient
+def change_patient():
     
-
+    user = User.query.filter_by(pat_ema=g.user.pat_ema)
+    form = UserUpdateForm(name=g.user.pat_name, phone=g.user.pat_tel)
     
-    
-    
-@bp.route('/change', methods=['POST'])
-def change_post():
-    
-    user_type = session.get('user_type')
-
-    # POST 변경사항 저장할 때
-    if user_type == "patient": # 일반 사용자 로그인
-        oldpassword = g.user.pat_pw #db 일반 사용자 패스워드
-        form = UserCreateForm(name=g.user.pat_name, phone=g.user.pat_tel)
-        print(form.name.data)
-        return render_template('change/changeN.html', form=form)
-        # checkpassword = form.password1.data #input 사용자 pw확인 
+    if request.method == 'POST' and form.validate_on_submit():
         
-    elif user_type == "hospital": # 병원 로그인
-        oldpassword = g.user.hos_pwd #db 일반 사용자 패스워드
-        checkpassword = form.password1.data #input 사용자 pw확인 
-    
-    if check_password_hash(oldpassword, checkpassword):
-        # 비밀번호 일치 (db, input)
-        
-        # 이름 변경 가능 , 비밀번호 변경 가능, 전화번호 변경 가능
-        if form.name.data is None: 
-            form.name.data = g.user.pat_name
-            db.add(form.name.data)
-            return(form.name)
-        
-        elif form.password1.data and form.password2.data is None: 
-            form.password1.data = oldpassword
-            form.password2.data = oldpassword
-            return(form.password1.data, form.password2.data)
-        
-        elif form.password1.data != form.password2.data:
-            flash("비밀번호 틀렸음 ㅋㅋ")
-        
+        if check_password_hash(user.first().pat_pw, form.old_password.data):
+            # 새로운 비밀번호가 존재할 경우 그 비밀번호로 변경
+            if form.new_password1.data:
+                user.update(dict(
+                        pat_name=form.name.data, 
+                        pat_pw=generate_password_hash(form.new_password1.data),
+                        pat_tel=form.phone.data
+                        ))
+            # 새로운 비밀번호가 존재하지 않을 경우 기존 비밀번호를 다시 넣음
+            else:
+                user.update(dict(
+                        pat_name=form.name.data, 
+                        pat_pw=generate_password_hash(form.old_password.data),
+                        pat_tel=form.phone.data
+                        ))
+                
+            db.session.add(user.first())
+            db.session.commit()
         else:
-            Nuser = User(pat_name=form.name.data,
-                            pat_pw=generate_password_hash(form.password1.data),
-                            pat_tel=form.phone.data)
-            
-            # db.session.add(Nuser)
-            session.query(User).filter_by(user_name = form.name.data, password1 = form.password1.data, password2 = form.password2.data)
-
-    else:
-        flash("비밀번호 틀렸음 ㅋㅋ")
+            flash('비밀번호 틀림ㅋㅋ')
+        
+        return redirect(url_for('change.change_patient'))
     
-    return render_template('mainj/main.html')
+    return render_template('change/changeN.html', form=form)
+    
+
+    
+    
+@bp.route('/hospital/', methods=['GET', 'POST'])
+def change_hospital():
+    
+    user = Hospital.query.filter_by(hos_cid=g.user.hos_cid)
+    subject = HosSub.query.join(Hospital, Hospital.hos_cid==HosSub.hos_cid).filter(Hospital.hos_cid==g.user.hos_cid)
+    hos_address1, hos_address2 = g.user.hos_addr.split(";block;")
+    form = HospitalUpdateForm(name=g.user.hos_name, address1=hos_address1, address2=hos_address2, tel=g.user.hos_tel)
+    subjects = [ x.ill_pid for x in subject.all() ]
+    
+    if request.method == 'POST' and form.validate_on_submit():
+        
+        if check_password_hash(user.first().hos_pwd, form.old_password.data):
+            
+            # 새로운 비밀번호가 존재할 경우 그 비밀번호로 변경
+            if form.new_password1.data:
+                user.update(dict(
+                        hos_name=form.name.data, 
+                        hos_addr=form.address1.data + ';block;' + form.address2.data,
+                        hos_pwd=generate_password_hash(form.new_password1.data),
+                        hos_tel=form.tel.data
+                        ))
+                
+            # 새로운 비밀번호가 존재하지 않을 경우 기존 비밀번호를 다시 넣음
+            else:
+                user.update(dict(
+                        hos_name=form.name.data, 
+                        hos_addr=form.address1.data + ';block;' + form.address2.data,
+                        hos_pwd=generate_password_hash(form.old_password.data),
+                        hos_tel=form.tel.data
+                        ))
+                
+            for del_hossub in HosSub.query.filter_by(hos_cid=user.first().hos_cid).all():
+                if type(del_hossub) is HosSub:
+                    db.session.delete(del_hossub)
+                
+            for ill_pid in form.subject.data:
+                add_hossub = HosSub(hos_cid=user.first().hos_cid, ill_pid=ill_pid)
+                db.session.add(add_hossub)
+                
+            db.session.add(user.first())
+            db.session.commit()
+        else:
+            flash('비밀번호 틀림ㅋㅋ')
+        
+        return redirect(url_for('change.change_hospital'))
+    
+    return render_template('change/changeH.html', form=form, subjects=subjects)
+    
+@bp.route('/signout/')
+@login_required_all
+def signout():
+    user_type = session.get('user_type')
+    if user_type == "patient": # 일반 사용자
+        return redirect(url_for('change.signout_patient'))
+    
+    elif user_type == "hospital": # 병원 
+        return redirect(url_for('change.signout_hospital'))
+    
+@bp.route('/signout/patient/')
+@login_required_all
+def signout_patient():
+    db.session.delete(User.query.filter_by(pat_ema=g.user.pat_ema).first())
+    db.session.commit()
+    return redirect(url_for('log.logout'))
+
+@bp.route('/signout/hospital/')
+@login_required_all
+def signout_hospital():
+    return redirect(url_for('main.index'))

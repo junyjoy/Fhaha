@@ -6,35 +6,49 @@
                 <h1>개인정보 수정(병원)</h1>
             </div>
             <div>
-                <form class="form-group gap-3" action="updateProcess.do" method="post">
+                <form class="form-group gap-3" method="post">
+                {{ form.csrf_token }}
+                {% include "form_errors.html" %}
                 <table class="table table-striped row">
                     <tr>
                         <th>병원 위치</th>
                         <td>
-                            <input class="form-control mb-1" type="text" name="subject" placeholder="주소">
-                            <input class="form-control" type="password" name="password" placeholder="상세 주소">
+                            <input class="form-control mb-1" type="text" id="address1" name="address1" value="{{ form.address1.data or '' }}">
+                            <input type="button" class="btn btn-primary" onclick="execDaumPostcode()" value="주소 검색"><br>
+                            <input class="form-control" type="text" name="address2" value="{{ form.address2.data or '' }}">
                         </td>
                     </tr>
                     <th>비밀번호 <br>수정</th>
-                    <td><input class="form-control" type="password" name="password" placeholder="기존 비밀번호">
-                        <br><input class="form-control mb-1" type="password" name="password" placeholder="새로운 비밀번호"><input class="form-control" type="password" name="password" placeholder="새로운 비밀번호확인">
+                    <td><input class="form-control" type="password" name="old_password" placeholder="기존 비밀번호">
+                        <br><input class="form-control mb-1" type="password" name="new_password1" placeholder="새로운 비밀번호">
+                        <input class="form-control" type="password" name="new_password2" placeholder="새로운 비밀번호확인">
                     </td>
                     <tr>
                         <th>전화번호 <br>수정</th>
-                        <td><input class="form-control" type="text" name="subject" placeholder="전화번호"></td>
+                        <td><input class="form-control" type="text" name="tel" value="{{ form.tel.data or '' }}"></td>
                     </tr>
                     <div class="form-check">
                     <tr>
                         <th>의료종목 <br>수정</th>
                         <td>
-                            <input class = "form-check-input" type="checkbox" name="medical" value="medicine"> 내과<br>
-                            <input class = "form-check-input" type="checkbox" name="medical" value="skin"> 피부과 <br>
-                            <input class = "form-check-input" type="checkbox" name="medical" value="urology"> 비뇨의학과 <br>
-                            <input class = "form-check-input" type="checkbox" name="medical" value="baby"> 산부인과 <br>
-                            <input class = "form-check-input" type="checkbox" name="medical" value="eye"> 안과 <br>
-                            <input class = "form-check-input" type="checkbox" name="medical" value="bone"> 정형외과 <br>
-                            <input class = "form-check-input" type="checkbox" name="medical" value="breath"> 이비인후과 <br>
-                            <input class = "form-check-input" type="checkbox" name="medical" value="teeth"> 치과 
+                            <ul class="list-group">
+                            {% for s in form.subject.choices %}
+                            <li class="list-group">
+                                <div>
+                                    <input class="form-check-input id='subject-{{form.subject.choices.index(s)}}'" name="subject"
+                                        type="checkbox" value="{{s[0]}}"
+                                        {% if s[0] in subjects %}
+                                        checked
+                                        {% endif %}>
+                                        
+                                    <label class="form-check-label" for="subject">{{s[1]}}</label>
+                                    
+                                </div>
+                            </li>
+                            {% endfor %}
+                            
+
+                        </ul>
                         </td>
                     </tr>
                     </div>
@@ -45,7 +59,7 @@
             </div>
             </div>
             <div class="btn-group col-md-offset-9">
-              <a href="javascript:void(0)" data-uri="{{ url_for('main.index') }}" class="secession btn btn-default bg-danger bg-danger text-light">회원탈퇴</a>
+              <a href="javascript:void(0)" data-uri="{{ url_for('change.signout') }}" class="delete btn btn-default btn-danger">회원탈퇴</a>
             </div>          
         </div>
 {% endblock %}
@@ -61,4 +75,6 @@
         });
     });
 </script>
+<script src="{{ url_for('static', filename='address.js') }}"></script>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 {% endblock %}

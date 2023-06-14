@@ -76,17 +76,67 @@ class HospitalCreateForm(FlaskForm):
     address1 = StringField('병원 주소', validators=[DataRequired('값이 비었습니다.'), Length(min=2, max=100)])
     address2 = StringField('병원 상세주소', validators=[DataRequired('값이 비었습니다.'), Length(min=2, max=100)])
     tel = StringField('전화번호', validators=[DataRequired('값이 비었습니다.'), Length(min=9, max=11)])
-
-    type = StringField('', default='')
-    
     subject = MultiCheckboxField('진료과목', choices=[(x.ill_pid, x.ill_type) for x in Subject.query.all()], validators=[MultiCheckboxAtLeastOne()], coerce=int)
     
 
 class UserLoginForm(FlaskForm):
     email = EmailField('사용자이메일', validators=[DataRequired(), Length(min=9, max=50)])
+<<<<<<< HEAD
     password = PasswordField('비밀번호', validators=[DataRequired('값이 비었습니다.')])
+=======
+    password = PasswordField('비밀번호', validators=[DataRequired('값이 비었습니다.'),Length(min=4)])
+>>>>>>> a28addf9365417936fc8330b10dccab5cb638dcf
     
 
 class HospitalLoginForm(FlaskForm):
     crn = StringField('사업자등록번호', validators=[DataRequired(), Length(min=9, max=50)])
+<<<<<<< HEAD
     password = PasswordField('비밀번호', validators=[DataRequired('값이 비었습니다.')])
+=======
+    password = PasswordField('비밀번호', validators=[DataRequired('값이 비었습니다.'),Length(min=4)])
+    
+    
+    
+class UserUpdateForm(FlaskForm):
+    """환자 회원정보 변경 폼 \n
+    Field:
+        `email` : email, pk \n
+        `old_password` : old password 
+        `new_password1` : new password \n
+        `new_password2` : verify new password \n
+        `name` : name \n
+        `phone` : phone number \n
+    Authors: jlee (junlee9834@gmail.com)         
+    
+    """
+    old_password = PasswordField('비밀번호', validators=[DataRequired('값이 비었습니다.')])
+    new_password1 = PasswordField('비밀번호', validators=[])
+    new_password2 = PasswordField('비밀번호확인', validators=[EqualTo('new_password1', '비밀번호가 일치하지 않습니다.')])
+    name = StringField('이름', validators=[DataRequired('값이 비었습니다.'), Length(min=2, max=20)])
+    phone = StringField('연락처', validators=[DataRequired('값이 비었습니다.'), Length(min=11, max=11)])    
+    
+ 
+    
+class HospitalUpdateForm(FlaskForm):
+    """병원 회원가입 폼 \n
+    Field:
+        `old_password` : old password  \n
+        `new_password1` : new password \n
+        `new_password2` : verify new password \n
+        `name` : hospital name \n
+        `address1` : hospital address \n
+        `address2` : hospital address \n
+        `tel` : telephone number \n
+    Authors: jlee (junlee9834@gmail.com)             
+    """
+        
+    old_password = PasswordField('비밀번호', validators=[DataRequired('값이 비었습니다.')])
+    new_password1 = PasswordField('비밀번호', validators=[])
+    new_password2 = PasswordField('비밀번호확인', validators=[EqualTo('new_password1', '비밀번호가 일치하지 않습니다.')])
+    name = StringField('병원명', validators=[DataRequired('값이 비었습니다.'), Length(min=2, max=100)])
+    address1 = StringField('병원 주소', validators=[DataRequired('값이 비었습니다.'), Length(min=2, max=100)])
+    address2 = StringField('병원 상세주소', validators=[DataRequired('값이 비었습니다.'), Length(min=2, max=100)])
+    tel = StringField('전화번호', validators=[DataRequired('값이 비었습니다.'), Length(min=9, max=11)])
+    subject = MultiCheckboxField('진료과목', choices=[(x.ill_pid, x.ill_type) for x in Subject.query.all()], validators=[MultiCheckboxAtLeastOne()], coerce=int)
+    
+>>>>>>> a28addf9365417936fc8330b10dccab5cb638dcf
