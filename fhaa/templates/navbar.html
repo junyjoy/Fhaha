@@ -18,7 +18,11 @@
             <ul class="navbar-nav ms-md-auto">
                 {% if g.user %}
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" id="user">{{ g.user_name }} 님</a>
+                    {% if g.user_type == "patient" %}
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" id="user">{{ g.user.pat_name }} 님</a>
+                    {% else %}
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" id="user">{{ g.user.hos_name }} 님</a>
+                    {% endif %} 
                     <div class="dropdown-menu" aria-labelledby="user">
                         <a class="dropdown-item" href="{{ url_for('login.logout')}}">Logout</a>
                         <a class="dropdown-item" href="{{ url_for('change.change') }}">Edit account info</a>

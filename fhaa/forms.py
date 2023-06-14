@@ -132,3 +132,22 @@ class HospitalUpdateForm(FlaskForm):
     tel = StringField('전화번호', validators=[DataRequired('값이 비었습니다.'), Length(min=9, max=11)])
     subject = MultiCheckboxField('진료과목', choices=[(x.ill_pid, x.ill_type) for x in Subject.query.all()], validators=[MultiCheckboxAtLeastOne()], coerce=int)
     
+class UserDeleteForm(FlaskForm):
+    """일반 사용자 탈퇴 폼 \n
+    `email` : email, pk \n
+    `old_password` : old password  \n
+
+    Args: hojin (cdhojin@gmail.com)
+    """
+    email = EmailField('사용자이메일', validators=[DataRequired(), Length(min=9, max=50)])
+    old_password = old_password = PasswordField('비밀번호', validators=[DataRequired('값이 비었습니다.')])
+    
+class HospitalDeleteForm(FlaskForm):
+    """병원 탈퇴 폼 \n
+    `email` : email, pk \n
+    `old_password` : old password  \n
+
+    Args: hojin (cdhojin@gmail.com)
+    """
+    crn = StringField('사업자등록번호', validators=[DataRequired(), Length(min=9, max=50)])
+    password = PasswordField('비밀번호', validators=[DataRequired('값이 비었습니다.'),Length(min=4)])

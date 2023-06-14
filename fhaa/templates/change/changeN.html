@@ -6,7 +6,7 @@
                 <h1>개인정보 수정(환자)</h1>
             </div>
             <div>
-                <form class="form-group" method="post">
+                <form class="form-group" method="POST">
                 {{ form.csrf_token }}
                 {% include "form_errors.html" %}
                 <table class="table table-striped row">
@@ -32,9 +32,11 @@
             </form>
             </div>
             </div>
+            <form method='POST'> 
             <div class="btn-group col-md-offset-9">
               <a href="javascript:void(0)" data-uri="{{ url_for('change.signout') }}" class="secession delete btn btn-default btn-danger">회원탈퇴</a>
             </div>
+            </form>
         </div>
 {% endblock %}
             
