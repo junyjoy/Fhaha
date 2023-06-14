@@ -87,12 +87,17 @@ def load_logged_in_user():
     else:
         g.user_type = user_type
         if user_type == 'patient':
+<<<<<<< HEAD
             g.user = User.query.get(user_id)    
             if g.user != None: 
                 g.user_name = g.user.pat_name
             else : 
                 g.user_name = "guest"
+=======
+            g.user = User.query.get(user_id)         
+            # g.user_name = g.user.pat_name
+>>>>>>> 83ecb9e0a05eb9aff47c598078de62082b4c308f
             
         elif user_type == 'hospital':
             g.user = Hospital.query.get(user_id)
-            g.user_name = g.user.hos_name
+            # g.user_name = g.user.hos_name

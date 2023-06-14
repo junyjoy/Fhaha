@@ -16,7 +16,7 @@ function getDaumPostcode() {
 
             // 주소 정보를 해당 필드에 넣는다.
             document.getElementById("location").value = addr;
+            setLocation();
         }
     }).open();
-    setCurrentLocation(document.getElementById("location").value);
 }

@@ -7,8 +7,14 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="navbar-collapse collapse" id="navbarResponsive">
+<<<<<<< HEAD
             <ul class="navbar-nav">                <li class="nav-item">
                     <a class="nav-link" href="{{url_for('request.user_req')}}">알림페이지</a>
+=======
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{url_for('request.write')}}">의뢰페이지</a> 
+>>>>>>> 83ecb9e0a05eb9aff47c598078de62082b4c308f
                 </li>
                 <li>
                     <a class="nav-link" href="{{url_for('request.user_req')}}">의뢰페이지</a> 
@@ -19,7 +25,11 @@
             <ul class="navbar-nav ms-md-auto">
                 {% if g.user %}
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" id="user">{{ g.user_name }} 님</a>
+                    {% if g.user_type == "patient" %}
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" id="user">{{ g.user.pat_name }} 님</a>
+                    {% else %}
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" id="user">{{ g.user.hos_name }} 님</a>
+                    {% endif %} 
                     <div class="dropdown-menu" aria-labelledby="user">
                         <a class="dropdown-item" href="{{ url_for('login.logout')}}">Logout</a>
                         <a class="dropdown-item" href="{{ url_for('change.change') }}">Edit account info</a>
