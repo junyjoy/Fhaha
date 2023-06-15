@@ -21,7 +21,6 @@ class Doctor(db.Model):
     sub = db.relationship('HosSub', primaryjoin='and_(Doctor.sub_id == HosSub.sub_id, Doctor.hos_cid == HosSub.hos_cid, Doctor.ill_pid == HosSub.ill_pid)', backref='doctors')
 
 
-
 class HosSub(db.Model):
     __tablename__ = 'hos_sub'
 
@@ -46,7 +45,6 @@ class Hospital(db.Model):
     hos_addr2 = db.Column(db.String(80))
     hos_lat = db.Column(db.Float, nullable=False)
     hos_lnt = db.Column(db.Float, nullable=False)
-
 
 
 class Matching(db.Model):
