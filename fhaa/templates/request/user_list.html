@@ -12,6 +12,7 @@
                 <th>환자 email</th>
                 <th>진료과목</th>
                 <th>환자 현재 위치</th>
+                <th>선택</th>
 
             </tr>
             </thead>
@@ -25,6 +26,9 @@
                 </td>
                 <td>{{ request.req_type }}</td>
                 <td>{{ request.req_loc }}</td>
+                <td>
+                    <button type="button" onclick="deleteRow(this);">X</button>
+                </td>
 
             </tr>
             {% endfor %}
@@ -47,3 +51,12 @@
     {% endif %} -->
 </div>
 {% endblock %}
+{% block script %}
+<script>
+    function deleteRow(ths){
+        var ths = $(ths);
+        
+        ths.parents("tr").remove();
+    }
+</script>
+{% endblock %}    
