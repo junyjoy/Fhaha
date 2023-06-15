@@ -117,9 +117,8 @@ def login_required_for_patient(view):
     """
     @functools.wraps(view)
     def wrapped_view(*args, **kwargs):
-        if g.user is not None and g.user == "hospital":
-            _next = request.url if request.method == 'GET' else ''
-            return redirect(url_for('login.login', next=_next))
+        if g.user is not None and type(g.user) == Hospital:
+            return redirect(url_for('main.index'))
         return view(*args, **kwargs)
     return wrapped_view
 
@@ -129,8 +128,7 @@ def login_required_for_hospital(view):
     """
     @functools.wraps(view)
     def wrapped_view(*args, **kwargs):
-        if g.user is not None and g.user == "patient":
-            _next = request.url if request.method == 'GET' else ''
-            return redirect(url_for('login.login', next=_next))
+        if g.user is not None and type(g.user) == User:
+            return redirect(url_for('main.index'))
         return view(*args, **kwargs)
     return wrapped_view

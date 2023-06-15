@@ -3,6 +3,7 @@ from werkzeug.utils import redirect
 from fhaa.models import Request, Subject
 import time, datetime
 from fhaa import db
+from fhaa.views.auth_views import login_required_for_patient, login_required_for_hospital
 
 bp = Blueprint('request', __name__, url_prefix='/request')
 #app = Flask(__name__)
@@ -16,10 +17,12 @@ bp = Blueprint('request', __name__, url_prefix='/request')
 #     return render_template('request/view.html')
 
 @bp.route('/', methods = ['GET'])    
+@login_required_for_patient
 def user_req() :
     addr_now = "경기도 군포시 산본천로 12"
     sub = Subject.query.all()
     return render_template('request/user_req.html',addr_now= addr_now, sub=sub)
+
 
 @bp.route('/', methods = ['POST'])    
 def req_post() :
@@ -43,6 +46,7 @@ def req_post() :
 
 
 @bp.route('/board/')
+@login_required_for_hospital
 def board():
     page = request.args.get('page', type=int, default=1)  # 페이지
     print(page)
