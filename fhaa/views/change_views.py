@@ -64,8 +64,7 @@ def change_hospital():
     
     user = Hospital.query.filter_by(hos_cid=g.user.hos_cid)
     subject = HosSub.query.join(Hospital, Hospital.hos_cid==HosSub.hos_cid).filter(Hospital.hos_cid==g.user.hos_cid)
-    hos_address1, hos_address2 = g.user.hos_addr.split(";block;")
-    form = HospitalUpdateForm(name=g.user.hos_name, address1=hos_address1, address2=hos_address2, tel=g.user.hos_tel)
+    form = HospitalUpdateForm(name=g.user.hos_name, address1=g.user.hos_addr1, address2=g.user.hos_addr2, tel=g.user.hos_tel)
     subjects = [ x.ill_pid for x in subject.all() ]
     
     if request.method == 'POST' and form.validate_on_submit():
@@ -76,7 +75,8 @@ def change_hospital():
             if form.new_password1.data:
                 user.update(dict(
                         hos_name=form.name.data, 
-                        hos_addr=form.address1.data + ';block;' + form.address2.data,
+                        hos_addr1=form.address1.data,
+                        hos_addr2=form.address2.data,
                         hos_pwd=generate_password_hash(form.new_password1.data),
                         hos_tel=form.tel.data
                         ))
@@ -85,7 +85,8 @@ def change_hospital():
             else:
                 user.update(dict(
                         hos_name=form.name.data, 
-                        hos_addr=form.address1.data + ';block;' + form.address2.data,
+                        hos_addr1=form.address1.data,
+                        hos_addr2=form.address2.data,
                         hos_pwd=generate_password_hash(form.old_password.data),
                         hos_tel=form.tel.data
                         ))

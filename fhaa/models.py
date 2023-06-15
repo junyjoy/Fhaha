@@ -3,22 +3,70 @@ from flask_sqlalchemy import SQLAlchemy
 from fhaa import db
 
 
-class Doctor(db.Model):
-    __tablename__ = 'doctor'
+
+class User(db.Model):
+    __tablename__ = 'user'
+
+    pat_name = db.Column(db.String(10), nullable=False)
+    pat_bir = db.Column(db.Date, nullable=False)
+    pat_ema = db.Column(db.String(30), primary_key=True)
+    pat_pw = db.Column(db.String(102), nullable=False)
+    pat_tel = db.Column(db.String(11), nullable=False)
+
+
+class Hospital(db.Model):
+    __tablename__ = 'hospital'
+
+    hos_name = db.Column(db.String(20), nullable=False)
+    hos_tel = db.Column(db.String(12), nullable=False)
+    hos_addr1 = db.Column(db.String(80), nullable=False)
+    hos_cid = db.Column(db.String(10), primary_key=True)
+    hos_pwd = db.Column(db.String(102), nullable=False)
+    hos_type = db.Column(db.String(20), nullable=False)
+    hos_addr2 = db.Column(db.String(80))
+    hos_lat = db.Column(db.Float, nullable=False)
+    hos_lnt = db.Column(db.Float, nullable=False)
+
+
+class Request(db.Model):
+    __tablename__ = 'request'
+
+    req_id = db.Column(db.Integer, primary_key=True, nullable=False)
+    pat_ema = db.Column(db.ForeignKey('user.pat_ema'), primary_key=True, nullable=False, index=True)
+    req_type = db.Column(db.String(20), nullable=False)
+    req_time = db.Column(db.String(20), nullable=False)
+    req_date = db.Column(db.DateTime, nullable=False)
+    req_loc = db.Column(db.String(80), nullable=False)
+    req_req = db.Column(db.String(200), nullable=False)
+
+    user = db.relationship('User', primaryjoin='Request.pat_ema == User.pat_ema', backref='requests')
+
+
+
+class Matching(db.Model):
+    __tablename__ = 'matching'
     __table_args__ = (
-        db.ForeignKeyConstraint(['sub_id', 'hos_cid', 'ill_pid'], ['hos_sub.sub_id', 'hos_sub.hos_cid', 'hos_sub.ill_pid']),
-        db.Index('fk_doctor_hos_sub1_idx', 'sub_id', 'hos_cid', 'ill_pid')
+        db.ForeignKeyConstraint(['req_id', 'pat_ema'], ['request.req_id', 'request.pat_ema']),
+        db.Index('matching_ibfk_2', 'req_id', 'pat_ema')
     )
 
-    doc_name = db.Column(db.String(20), nullable=False)
-    doc_type = db.Column(db.String(20), nullable=False)
-    doc_pid = db.Column(db.String(11), primary_key=True, nullable=False)
-    ill_pid = db.Column(db.Integer, primary_key=True, nullable=False)
-    sub_id = db.Column(db.Integer, primary_key=True, nullable=False)
-    hos_cid = db.Column(db.String(11), primary_key=True, nullable=False)
+    mat_id = db.Column(db.Integer, primary_key=True, nullable=False)
+    req_id = db.Column(db.Integer, primary_key=True, nullable=False)
+    hos_cid = db.Column(db.ForeignKey('hospital.hos_cid'), primary_key=True, nullable=False, index=True)
+    pat_ema = db.Column(db.String(30), primary_key=True, nullable=False)
 
-    sub = db.relationship('HosSub', primaryjoin='and_(Doctor.sub_id == HosSub.sub_id, Doctor.hos_cid == HosSub.hos_cid, Doctor.ill_pid == HosSub.ill_pid)', backref='doctors')
+    hospital = db.relationship('Hospital', primaryjoin='Matching.hos_cid == Hospital.hos_cid', backref='matchings')
+    req = db.relationship('Request', primaryjoin='and_(Matching.req_id == Request.req_id, Matching.pat_ema == Request.pat_ema)', backref='matchings')
 
+
+
+class Subject(db.Model):
+    __tablename__ = 'subject'
+
+    ill_pid = db.Column(db.Integer, primary_key=True)
+    ill_name = db.Column(db.String(40), nullable=False)
+    ill_sym = db.Column(db.String(100), nullable=False)
+    ill_type = db.Column(db.String(20), nullable=False)
 
 
 class HosSub(db.Model):
@@ -32,66 +80,18 @@ class HosSub(db.Model):
     subject = db.relationship('Subject', primaryjoin='HosSub.ill_pid == Subject.ill_pid', backref='hos_subs')
 
 
-
-class Hospital(db.Model):
-    __tablename__ = 'hospital'
-
-    hos_name = db.Column(db.String(20), nullable=False)
-    hos_tel = db.Column(db.String(12), nullable=False)
-    hos_addr = db.Column(db.String(80), nullable=False)
-    hos_cid = db.Column(db.String(11), primary_key=True)
-    hos_pwd = db.Column(db.String(102), nullable=False)
-    hos_type = db.Column(db.String(20), nullable=False)
-
-
-
-class Matching(db.Model):
-    __tablename__ = 'matching'
+class Doctor(db.Model):
+    __tablename__ = 'doctor'
     __table_args__ = (
-        db.ForeignKeyConstraint(['req_id', 'pat_ema'], ['request.req_id', 'request.pat_ema']),
-        db.Index('fk_matching_request1_idx', 'req_id', 'pat_ema')
+        db.ForeignKeyConstraint(['sub_id', 'hos_cid', 'ill_pid'], ['hos_sub.sub_id', 'hos_sub.hos_cid', 'hos_sub.ill_pid']),
+        db.Index('doctor_ibfk_1', 'sub_id', 'hos_cid', 'ill_pid')
     )
 
-    mat_id = db.Column(db.Integer, primary_key=True, nullable=False)
-    req_id = db.Column(db.Integer, primary_key=True, nullable=False)
-    pat_ema = db.Column(db.String(30), primary_key=True, nullable=False)
-    hos_cid = db.Column(db.ForeignKey('hospital.hos_cid'), primary_key=True, nullable=False, index=True)
+    doc_name = db.Column(db.String(20), nullable=False)
+    doc_type = db.Column(db.String(20), nullable=False)
+    doc_pid = db.Column(db.String(10), primary_key=True, nullable=False)
+    ill_pid = db.Column(db.Integer, primary_key=True, nullable=False)
+    sub_id = db.Column(db.Integer, primary_key=True, nullable=False)
+    hos_cid = db.Column(db.String(10), primary_key=True, nullable=False)
 
-    hospital = db.relationship('Hospital', primaryjoin='Matching.hos_cid == Hospital.hos_cid', backref='matchings')
-    request = db.relationship('Request', primaryjoin='and_(Matching.req_id == Request.req_id, Matching.pat_ema == Request.pat_ema)', backref='matchings')
-
-
-
-class Request(db.Model):
-    __tablename__ = 'request'
-
-    req_id = db.Column(db.Integer, primary_key=True, nullable=False)
-    pat_ema = db.Column(db.ForeignKey('user.pat_ema'), primary_key=True, nullable=False, index=True)
-    req_type = db.Column(db.String(20))
-    req_time = db.Column(db.String(20))
-    req_date = db.Column(db.DateTime)
-    req_loc = db.Column(db.String(80))
-    req_req = db.Column(db.String(200))
-
-    user = db.relationship('User', primaryjoin='Request.pat_ema == User.pat_ema', backref='requests')
-
-
-
-class Subject(db.Model):
-    __tablename__ = 'subject'
-
-    ill_pid = db.Column(db.Integer, primary_key=True)
-    ill_name = db.Column(db.String(40), nullable=False)
-    ill_sym = db.Column(db.String(100), nullable=False)
-    ill_type = db.Column(db.String(20), nullable=False)
-
-
-
-class User(db.Model):
-    __tablename__ = 'user'
-
-    pat_name = db.Column(db.String(10), nullable=False)
-    pat_bir = db.Column(db.Date, nullable=False)
-    pat_ema = db.Column(db.String(30), primary_key=True)
-    pat_pw = db.Column(db.String(102), nullable=False)
-    pat_tel = db.Column(db.String(11), nullable=False)
+    sub = db.relationship('HosSub', primaryjoin='and_(Doctor.sub_id == HosSub.sub_id, Doctor.hos_cid == HosSub.hos_cid, Doctor.ill_pid == HosSub.ill_pid)', backref='doctors')
