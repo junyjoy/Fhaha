@@ -30,7 +30,7 @@
                         {% if g.user_type == 'patient' %}
                         <a class="dropdown-item" href="{{ url_for('request.user_req') }}">의뢰하기</a>
                         {% else %}
-                        <a class="dropdown-item" href="{{ url_for('request.user_req') }}">알림페이지</a>
+                        <a class="dropdown-item" href="{{ url_for('request.board') }}">알림페이지</a>
                         {% endif %} 
                         <!-- <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="../5/pulse/bootstrap.min.css" download="">bootstrap.min.css</a>
