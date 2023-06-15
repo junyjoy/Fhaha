@@ -2,9 +2,11 @@
 
 final project with LJ, LHJ, LSW
 
-- test
-
 ## Command
+
+### PIP
+
+`pip install -r requirements.txt`
 
 ### Flask Command
 
