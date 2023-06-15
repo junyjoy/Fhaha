@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% block content %}
+    {% block script %}
+    <script defer src="{{ url_for('static', filename='noti_test.js')}}"></script>
+    {% endblock %}    
+    <button onclick="makeNoti();">알림 보내기</button>
+{% endblock %}
