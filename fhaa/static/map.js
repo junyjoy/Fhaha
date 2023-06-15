@@ -21,6 +21,10 @@ if (navigator.geolocation) {
         var lat = position.coords.latitude, // 위도
             lon = position.coords.longitude; // 경도
         
+        console.log(lat,lon)
+        document.getElementById('location_lat').value = toString(lat);
+        document.getElementById('location_lon').value = toString(lon);
+        
         var locPosition = new kakao.maps.LatLng(lat, lon) // 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성합니다
         
         // 마커와 인포윈도우를 표시합니다
@@ -91,13 +95,40 @@ kakao.maps.event.addListener(map, 'click', function (mouseEvent) {
 });
 
 
-// 좌표를 주소로 변환하여 검색창에 입력 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// 좌표<->주소 변환하여 검색창에 입력 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // 주소-좌표 변환 객체를 생성합니다
 var geocoder = new kakao.maps.services.Geocoder();
 
-
+// 좌표를 주소로 변환
 function searchDetailAddrFromCoords(coords, callback) {
     // 좌표로 법정동 상세 주소 정보를 요청합니다
     geocoder.coord2Address(coords['La'], coords['Ma'], callback);
+}
+
+
+
+
+function setLocation() {
+    marker.setMap(null);
+
+    geocoder.addressSearch(document.getElementById('location').value, function(result, status) {
+
+        // 정상적으로 검색이 완료됐으면 
+        if (status === kakao.maps.services.Status.OK) {
+            // marker.setMap(null);
+
+            var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+            // 결과값으로 받은 위치를 마커로 표시합니다
+            marker = new kakao.maps.Marker({
+                map: map,
+                position: coords
+            });
+
+
+            // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+            map.setCenter(coords);
+        } 
+    });    
 }

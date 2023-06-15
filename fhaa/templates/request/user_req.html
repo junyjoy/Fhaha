@@ -1,0 +1,34 @@
+{% extends 'base.html'%}
+<script>
+    function finish() {
+    alert("병원에 대한 설문을 완료하셨습니다.");
+    }
+ </script>
+{% block content %}
+<br><br><br><br><br><br>
+<strong>진료의뢰 요청</strong>
+<form action = "{{ url_for('request.req_post') }}" method ="POST">
+    <ul>
+    <li>의뢰인 : {{ g.user_name }}</li>
+    <li>위치 : {{addr_now}}</li>
+    <li> 희망시간 
+        <select name='req_time'>
+            <option value='' selected>-- 선택 --</option>
+            <option value='10'>10분내외</option>
+            <option value='30'>30분내외</option>
+            <option value='60'>60분내외</option>
+      </select>
+    </il>
+    <li> 진료과목 
+        <select name='req_type'>
+            <option value='' selected>-- 선택 --</option>
+            {% for sub_item  in sub %}
+                <option value="{{sub_item.ill_pid}}">{{sub_item.ill_type}}</option> 
+            {% endfor %}      
+        </select>
+    </il>
+    <li>요청사항 <input name = "req_req" type="text" placeholder="요청사항을 입력해주세요."> </li>        
+    </ul>
+    <input type ="submit" onclick = "finish()" value ="의뢰등록"  ><input type ="reset" value="다시작성">
+</form>
+{% endblock %}

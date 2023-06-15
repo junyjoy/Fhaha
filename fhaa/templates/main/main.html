@@ -7,14 +7,18 @@
         <div class="mb-3">
             <h3 class="text-left">현재 위치</h3>
 
-            <div class="d-flex ">
-                <input type="text" class="form-control" name="location" id="location" value="">
-                <input type="button" class="btn btn-primary" onclick="searchLocation()" value="주소 검색"><br>
+            <div class="d-flex">
+                <input type="text" class="form-control" name="location" id="location" onchange="setLocation();" readonly>
+                <!--위도-->
+                <input type="text" class="form-control" name="location_lat" id="location_lat" hidden> 
+                <!--경도-->
+                <input type="text" class="form-control" name="location_lon" id="location_lon"  hidden> 
+                <input type="button" class="btn btn-primary" onclick="getDaumPostcode();" value="주소 검색"><br>
             </div>
         </div>
-        <!-- Map -->
-        <div class="w-100" id="map" style="width:500px;height:400px;"></div>
 
+        <!-- Map -->
+        <div class="w-100" id="map" style="height:400px;"></div>
 
         <!-- Page Features-->
         <div class="row gx-lg-5">
