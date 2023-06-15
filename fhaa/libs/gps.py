@@ -1,3 +1,7 @@
+"""위치 관련 함수
+
+Authors: jlee (junlee9834@gmail.com)
+"""
 from haversine import haversine
 from geopy.geocoders import Nominatim
 import json, requests
@@ -5,12 +9,16 @@ import json, requests
 
 def geocoding(address:str):
     """주소를 위경도로 변환
+    
+    geopy 모듈을 사용하는데 오차가 꽤 큼
 
     Args:
         address (str): 주소
 
     Returns:
         tuple: (geo.latitude, geo.longitude)
+        
+    Authors: jlee (junlee9834@gmail.com)
     """
     geolocoder = Nominatim(user_agent = 'South Korea', timeout=None)
     geo = geolocoder.geocode(address)
@@ -20,12 +28,16 @@ def geocoding(address:str):
 
 def get_location(address:str):
     """주소를 위경도로 변환
+    
+    카카오 API를 이용함
 
     Args:
         address (str): 주소
 
     Returns:
         tuple: (latitude:float, longitude:float)
+        
+    Authors: jlee (junlee9834@gmail.com)
     """
     url = 'https://dapi.kakao.com/v2/local/search/address.json?query=' + address
     # 'KaKaoAK '는 그대로 두시고 개인키만 지우고 입력해 주세요.
@@ -40,8 +52,6 @@ def get_location(address:str):
     return (float(address['y']), float(address['x']))
 
 
-
-
 def compare(a_location:tuple, b_location:tuple):
     """a_location과 b_location의 직선 거리를 계산
 
@@ -50,11 +60,14 @@ def compare(a_location:tuple, b_location:tuple):
         b_location (tuple): location B (latitude, longitude)
 
     Returns:
-        Any: _description_
+        Any: meter(float)
+        
+    Authors: jlee (junlee9834@gmail.com)
     """
     # 거리 계산
     result = haversine(a_location, b_location, unit = 'm')
     return result
 
+
 r = compare(get_location("서울특별시 강남구 학동로 171"), get_location("서울특별시 강남구 논현로 704"))
-print(r,'m')
+print(f"{r:.2f}",'m')
