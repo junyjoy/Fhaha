@@ -1,0 +1,41 @@
+   <div class="navbar-collapse collapse" id="navbarResponsive">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{url_for('request.views')}}">알림페이지</a>
+                </li>
+                <li>
+                    <a class="nav-link" href="{{url_for('request.write')}}">의뢰페이지</a> 
+                </li>
+
+
+
+
+
+------------------- Create------
+@app.route('/hospital',methods=['POST'])
+def hospital_post():
+    eval_list = EvaluteItem.query.filter(EvaluteItem.target == "병원").order_by(EvaluteItem.type).all()
+    userinfo= session.get('loginUser')
+    pid=userinfo['pat_id']
+    did =userinfo['userid']
+
+    for item in eval_list:
+        item_value = request.form.get(str(item.evalu_id))
+        u = HosEvalu(pat_id = pid, diag_id = did,evalu_id =item.evalu_id, evalu_ans=item_value)
+        db_session.add(u)
+    db_session.commit()
+    return render_template('home.html')
+
+
+  class Request(db.Model):
+    __tablename__ = 'request'
+
+    req_type = db.Column(db.String(20), nullable=False)
+    req_loc = db.Column(db.String(80), nullable=False)
+    req_time = db.Column(db.String(20), nullable=False)
+    req_req = db.Column(db.String(200), nullable=False)
+    req_rid = db.Column(db.Integer, primary_key=True, nullable=False)
+    req_date = db.Column(db.Date, nullable=False)
+    pat_ema = db.Column(db.ForeignKey('user.pat_ema'), primary_key=True, nullable=False, index=True)
+    
+    user = db.relationship('User', primaryjoin='Request.pat_ema == User.pat_ema', backref='requests')

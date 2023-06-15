@@ -2,7 +2,7 @@
 {% block content %}
 <br><br><br><br><br><br>
 <strong>진료의뢰 요청</strong>
-<form action ="/write" method = "POST">
+<form action ="/request/write/" method = "POST">
     의뢰인 : {{pat_ema }}
     <br>
     위치 : {{addr}}
@@ -21,18 +21,15 @@
         <select name = "req_type">진료과목
             <option>내과</option>
             <option>피부과</option>
+            <option>소아과</option>
+            <option>비뇨의학과</option>
             <option>산부인과</option>
-            <option>가정의학과</option>
-            <option>이비인후과</option>
-            <option>비뇨기과</option>
-            <option>소아청소년과</option>
-            <option>정형외과</option>
-            <option>치과</option>
             <option>안과</option>
-            <option>신경과</option>
+            <option>정형외과</option>
+            <option>이비인후과</option>
+            <option>치과</option>
         </select>
     
-<<<<<<< HEAD
     </div> <br>
     <div>
         요청사항(선택)
@@ -41,25 +38,3 @@
 <input type ="submit" value ="의뢰등록"><input type ="reset" value="다시작성">
 </form>
 {%endblock%}
-=======
-        </div>
-
-    </div>
-    
-
-
-
-
-                    
-                </div>
-            </div>
-            <div class="bt_wrap">
-                <a href="view.html" class="on">등록</a>
-                <a href="list.html">취소</a>
-            </div>
-        </div>
-    </div>
-</body>
-</html>
-{% endblock %}
->>>>>>> a28addf9365417936fc8330b10dccab5cb638dcf
