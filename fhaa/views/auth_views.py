@@ -10,7 +10,7 @@ from fhaa import db
 from werkzeug.utils import redirect
 from werkzeug.security import generate_password_hash
 import functools
-
+from fhaa.libs import gps
 
 bp = Blueprint('auth', __name__, url_prefix='/signup')
 
@@ -56,12 +56,18 @@ def hospital_signup():
         if request.method == 'POST' and form.validate_on_submit() and g.user is None: 
             user = Hospital.query.filter_by(hos_cid=form.crn.data).first()
             if not user:
+                hospital_location = gps.get_location(form.address1.data)
+
                 user = Hospital(
                             hos_cid=form.crn.data,
                             hos_pwd=generate_password_hash(form.password1.data),
                             hos_name=form.name.data,
-                            hos_addr=form.address1.data + ';block;' + form.address2.data,
+                            hos_addr1=form.address1.data,
+                            hos_addr2=form.address2.data,
                             hos_tel=form.tel.data,
+                            hos_lat=hospital_location[0],
+                            hos_lnt=hospital_location[1],
+                            hos_type=''
                         )
                 db.session.add(user)
                 db.session.commit()

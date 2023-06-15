@@ -5,6 +5,38 @@ Authors: jlee (junlee9834@gmail.com)
 from haversine import haversine
 from geopy.geocoders import Nominatim
 import json, requests
+import time
+
+
+def logging_time(original_fn):
+    """
+    함수의 실행 시간을 측정하여 출력함.
+    데코레이터로 사용.
+
+    Examples:
+    ```
+        @logging_time
+        def test():
+            time.sleep(2)
+    ```
+    Print:
+        WorkingTime[main]: 2.004459857940674 sec
+
+    Args:
+        original_fn (_type_): 함수
+    """
+    def wrapper_fn(*args, **kwargs):
+        start_time = time.time()
+        result = original_fn(*args, **kwargs)
+        end_time = time.time()
+        print(
+            "WorkingTime[{}]: {} sec".format(
+                original_fn.__name__, end_time - start_time
+            )
+        )
+        return result
+
+    return wrapper_fn
 
 
 def geocoding(address:str):
@@ -45,9 +77,9 @@ def get_location(address:str):
     headers = {"Authorization": "KakaoAK d3784c7a2755b1198868ce5e7ceb418f"}
     api_json = json.loads(str(requests.get(url,headers=headers).text))
     address = api_json['documents'][0]['address']
-#   crd = {"lat": str(address['y']), "lng": str(address['x'])}
-#   address_name = address['address_name']
-    print((float(address['y']), float(address['x'])))
+    # crd = {"lat": str(address['y']), "lng": str(address['x'])}
+    # address_name = address['address_name']
+    # print((float(address['y']), float(address['x'])))
 
     return (float(address['y']), float(address['x']))
 
@@ -69,5 +101,45 @@ def compare(a_location:tuple, b_location:tuple):
     return result
 
 
-r = compare(get_location("서울특별시 강남구 학동로 171"), get_location("서울특별시 강남구 논현로 704"))
-print(f"{r:.2f}",'m')
+
+# r = compare(get_location("서울특별시 강남구 학동로 171"), get_location("서울특별시 강남구 논현로 704"))
+# print(f"{r:.2f}",'m')
+
+
+def read_csv_for_test():
+    import csv
+    
+    retValue = []
+    with open('20191128.csv','r') as f:
+        rdr = csv.reader(f)
+        for line in rdr:
+            retValue.append({"name":line[1], "address":line[5]})
+            
+    return retValue
+        
+
+@logging_time
+def match_hospital(patient_location:tuple, hospitals):
+    result = []
+    for hospital in hospitals:
+        print(f"patient: {patient_location}")
+        print(hospital['name'], hospital['address'])
+        distance = compare(patient_location, get_location(hospital['address']))
+        print(f"distance: {distance}")
+        print()
+        result.append({hospital['name']:distance})
+    return result
+
+
+
+# print(read_csv_for_test())  
+
+# hos = match_hospital(
+#     get_location("서울특별시 강남구 학동로 171"), 
+#     read_csv_for_test()
+# )
+# print(hos)
+
+
+
+# print(get_location("전라북도 익산시 목천로 120 (목천동)"))

@@ -4,33 +4,14 @@ from fhaa import db
 
 
 
-class Doctor(db.Model):
-    __tablename__ = 'doctor'
-    __table_args__ = (
-        db.ForeignKeyConstraint(['sub_id', 'hos_cid', 'ill_pid'], ['hos_sub.sub_id', 'hos_sub.hos_cid', 'hos_sub.ill_pid']),
-        db.Index('doctor_ibfk_1', 'sub_id', 'hos_cid', 'ill_pid')
-    )
+class User(db.Model):
+    __tablename__ = 'user'
 
-    doc_name = db.Column(db.String(20), nullable=False)
-    doc_type = db.Column(db.String(20), nullable=False)
-    doc_pid = db.Column(db.String(10), primary_key=True, nullable=False)
-    ill_pid = db.Column(db.Integer, primary_key=True, nullable=False)
-    sub_id = db.Column(db.Integer, primary_key=True, nullable=False)
-    hos_cid = db.Column(db.String(10), primary_key=True, nullable=False)
-
-    sub = db.relationship('HosSub', primaryjoin='and_(Doctor.sub_id == HosSub.sub_id, Doctor.hos_cid == HosSub.hos_cid, Doctor.ill_pid == HosSub.ill_pid)', backref='doctors')
-
-
-class HosSub(db.Model):
-    __tablename__ = 'hos_sub'
-
-    sub_id = db.Column(db.Integer, primary_key=True, nullable=False)
-    hos_cid = db.Column(db.ForeignKey('hospital.hos_cid'), primary_key=True, nullable=False, index=True)
-    ill_pid = db.Column(db.ForeignKey('subject.ill_pid'), primary_key=True, nullable=False, index=True)
-
-    hospital = db.relationship('Hospital', primaryjoin='HosSub.hos_cid == Hospital.hos_cid', backref='hos_subs')
-    subject = db.relationship('Subject', primaryjoin='HosSub.ill_pid == Subject.ill_pid', backref='hos_subs')
-
+    pat_name = db.Column(db.String(10), nullable=False)
+    pat_bir = db.Column(db.Date, nullable=False)
+    pat_ema = db.Column(db.String(30), primary_key=True)
+    pat_pw = db.Column(db.String(102), nullable=False)
+    pat_tel = db.Column(db.String(11), nullable=False)
 
 
 class Hospital(db.Model):
@@ -45,6 +26,21 @@ class Hospital(db.Model):
     hos_addr2 = db.Column(db.String(80))
     hos_lat = db.Column(db.Float, nullable=False)
     hos_lnt = db.Column(db.Float, nullable=False)
+
+
+class Request(db.Model):
+    __tablename__ = 'request'
+
+    req_id = db.Column(db.Integer, primary_key=True, nullable=False)
+    pat_ema = db.Column(db.ForeignKey('user.pat_ema'), primary_key=True, nullable=False, index=True)
+    req_type = db.Column(db.String(20), nullable=False)
+    req_time = db.Column(db.String(20), nullable=False)
+    req_date = db.Column(db.DateTime, nullable=False)
+    req_loc = db.Column(db.String(80), nullable=False)
+    req_req = db.Column(db.String(200), nullable=False)
+
+    user = db.relationship('User', primaryjoin='Request.pat_ema == User.pat_ema', backref='requests')
+
 
 
 class Matching(db.Model):
@@ -64,21 +60,6 @@ class Matching(db.Model):
 
 
 
-class Request(db.Model):
-    __tablename__ = 'request'
-
-    req_id = db.Column(db.Integer, primary_key=True, nullable=False)
-    pat_ema = db.Column(db.ForeignKey('user.pat_ema'), primary_key=True, nullable=False, index=True)
-    req_type = db.Column(db.String(20), nullable=False)
-    req_time = db.Column(db.String(20), nullable=False)
-    req_date = db.Column(db.DateTime, nullable=False)
-    req_loc = db.Column(db.String(80), nullable=False)
-    req_req = db.Column(db.String(200), nullable=False)
-
-    user = db.relationship('User', primaryjoin='Request.pat_ema == User.pat_ema', backref='requests')
-
-
-
 class Subject(db.Model):
     __tablename__ = 'subject'
 
@@ -88,12 +69,29 @@ class Subject(db.Model):
     ill_type = db.Column(db.String(20), nullable=False)
 
 
+class HosSub(db.Model):
+    __tablename__ = 'hos_sub'
 
-class User(db.Model):
-    __tablename__ = 'user'
+    sub_id = db.Column(db.Integer, primary_key=True, nullable=False)
+    hos_cid = db.Column(db.ForeignKey('hospital.hos_cid'), primary_key=True, nullable=False, index=True)
+    ill_pid = db.Column(db.ForeignKey('subject.ill_pid'), primary_key=True, nullable=False, index=True)
 
-    pat_name = db.Column(db.String(10), nullable=False)
-    pat_bir = db.Column(db.Date, nullable=False)
-    pat_ema = db.Column(db.String(30), primary_key=True)
-    pat_pw = db.Column(db.String(102), nullable=False)
-    pat_tel = db.Column(db.String(11), nullable=False)
+    hospital = db.relationship('Hospital', primaryjoin='HosSub.hos_cid == Hospital.hos_cid', backref='hos_subs')
+    subject = db.relationship('Subject', primaryjoin='HosSub.ill_pid == Subject.ill_pid', backref='hos_subs')
+
+
+class Doctor(db.Model):
+    __tablename__ = 'doctor'
+    __table_args__ = (
+        db.ForeignKeyConstraint(['sub_id', 'hos_cid', 'ill_pid'], ['hos_sub.sub_id', 'hos_sub.hos_cid', 'hos_sub.ill_pid']),
+        db.Index('doctor_ibfk_1', 'sub_id', 'hos_cid', 'ill_pid')
+    )
+
+    doc_name = db.Column(db.String(20), nullable=False)
+    doc_type = db.Column(db.String(20), nullable=False)
+    doc_pid = db.Column(db.String(10), primary_key=True, nullable=False)
+    ill_pid = db.Column(db.Integer, primary_key=True, nullable=False)
+    sub_id = db.Column(db.Integer, primary_key=True, nullable=False)
+    hos_cid = db.Column(db.String(10), primary_key=True, nullable=False)
+
+    sub = db.relationship('HosSub', primaryjoin='and_(Doctor.sub_id == HosSub.sub_id, Doctor.hos_cid == HosSub.hos_cid, Doctor.ill_pid == HosSub.ill_pid)', backref='doctors')
