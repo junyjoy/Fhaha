@@ -46,9 +46,13 @@
         <tbody>
           {%for hos in hoslist%}
           <tr class="table-secondary"> 
-            <td> <span class="badge rounded-pill bg-info">추천</span></td>
+            <td><span class="badge rounded-pill bg-info">추천</span></td>
             <td> {{hos.hos_name}}</td>
-            <td> {{ (hos.hos_addr1.replace(';block;', ", ")) }}</td>
+            {% if hos.hos_addr2 %}
+              <td> {{ ", ".join((hos.hos_addr1,hos.hos_addr2)) }}</td>
+            {% else %}
+              <td> {{ hos.hos_addr1 }}</td>
+            {% endif %}
             <td> {{hos.hos_tel}}</td>
           </tr>
           {%endfor%}
