@@ -1,6 +1,8 @@
 # coding: utf-8
 from flask_sqlalchemy import SQLAlchemy
-from fhaa import db
+
+
+db = SQLAlchemy()
 
 
 
@@ -76,8 +78,8 @@ class Request(db.Model):
     req_date = db.Column(db.DateTime, nullable=False)
     req_loc = db.Column(db.String(80), nullable=False)
     req_req = db.Column(db.String(200), nullable=False)
-    req_chk = db.Column(db.Integer, nullable=False, server_default=db.FetchedValue())
     hos_cid = db.Column(db.ForeignKey('hospital.hos_cid'), nullable=False, index=True)
+    req_chk = db.Column(db.Integer, nullable=False, server_default=db.FetchedValue())
 
     hospital = db.relationship('Hospital', primaryjoin='Request.hos_cid == Hospital.hos_cid', backref='requests')
     user = db.relationship('User', primaryjoin='Request.pat_ema == User.pat_ema', backref='requests')

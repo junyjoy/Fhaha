@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, session, request, flash, url_for, g, Flask
 from werkzeug.utils import redirect
-from fhaa.models import Request, Subject, Hospital
+from fhaa.models import Request, Subject, Hospital, HosSub
 import time, datetime
 from fhaa import db
 from fhaa.views.auth_views import login_required_for_patient, login_required_for_hospital
@@ -39,11 +39,18 @@ def req_post() :
     location_lon = float(request.form.get('location_lon'))
     lat_KM = 0.0091
     lon_KM = 0.0113
-    hospitals = Hospital.query.filter(Hospital.hos_lat >= location_lat-lat_KM, Hospital.hos_lat <= location_lat+lat_KM)\
+    # hospitals = Hospital.query.filter(Hospital.hos_lat >= location_lat-lat_KM, Hospital.hos_lat <= location_lat+lat_KM)\
+    #     .filter(Hospital.hos_lnt >= location_lon-lon_KM, Hospital.hos_lnt <= location_lon+lon_KM)
+    
+    hospitals = Hospital.query.join(HosSub).join(Subject).filter(Subject.ill_type==f_req_type)\
+        .filter(Hospital.hos_lat >= location_lat-lat_KM, Hospital.hos_lat <= location_lat+lat_KM)\
         .filter(Hospital.hos_lnt >= location_lon-lon_KM, Hospital.hos_lnt <= location_lon+lon_KM)
-    print(hospitals.all())
+    
+    
+    # print(hospitals.all())
     
     for hospital in hospitals:
+        print(hospital.hos_addr1)
         r = Request(
                 req_type = f_req_type, 
                 req_loc = addr_now,
@@ -53,7 +60,7 @@ def req_post() :
                 req_date = f_req_date,
                 hos_cid = hospital.hos_cid
             )
-        db.session.add(r)            
+        db.session.add(r)          
     db.session.commit()
     
     return redirect(url_for('main.index'))
