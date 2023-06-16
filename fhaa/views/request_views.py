@@ -1,9 +1,9 @@
 from flask import Blueprint, render_template, session, request, flash, url_for, g, Flask
 from werkzeug.utils import redirect
-from fhaa.models import Request, Subject, Hospital, HosSub
+from fhaa.models import Request, Subject, Hospital, HosSub, Matching
 import time, datetime
 from fhaa import db
-from fhaa.views.auth_views import login_required_for_patient, login_required_for_hospital
+from fhaa.views.auth_views import login_required_for_patient, login_required_for_hospital, login_required_all
 
 bp = Blueprint('request', __name__, url_prefix='/request')
 #app = Flask(__name__)
@@ -133,7 +133,7 @@ def hospital_list():
     print(page)
     request_list = Request.query.join(Hospital).filter(Request.pat_ema==g.user.pat_ema, Request.req_chk==0)
     for r in request_list:
-        print(r.hos_name)
+        print(r.hospital.hos_name)
     request_list = request_list.paginate(page=page, per_page=10)
 
     return render_template('request/hospital_list.html', request_list=request_list)
@@ -148,6 +148,20 @@ def match_():
         return render_template('auth/congrats.html', user_id=user_id, user_name=user_name)
     else:
         return redirect(url_for('main.index'))
+
+@bp.route('/match/status/')
+def matching():
+    '''환자와 병원 모두 현재 매칭 상태를 보여줌.
+    '''
+    page = request.args.get('page', type=int, default=1)  # 페이지
+    print(page)
+    request_list = Request.query.join(Hospital).filter(Request.pat_ema==g.user.pat_ema, Matching._chk==0)
+    for r in request_list:
+        print(r.hospital.hos_name)
+    request_list = request_list.paginate(page=page, per_page=10)
+
+    return render_template('request/hospital_list.html', request_list=request_list)
+
 
 # @bp.route('/write/', methods=["GET"])
 # def write():
