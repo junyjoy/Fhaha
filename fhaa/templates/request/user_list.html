@@ -19,7 +19,7 @@
             <tbody>
             {% if request_list %}
             {% for request in request_list.items %}
-            <tr>
+            <tr id="{{ request.req_id }}">
                 <td>{{ loop.index }}</td>
                 <td>
                     <a href="{{ url_for('request.detail', request_id=request.req_id) }}">{{ request.pat_ema }}</a>
@@ -27,7 +27,7 @@
                 <td>{{ request.req_type }}</td>
                 <td>{{ request.req_loc }}</td>
                 <td>
-                    <button type="button" onclick="deleteRow(this);">X</button>
+                    <button type="button" onclick="deleteRow('{{ request.req_id }}');">X</button>
                 </td>
 
             </tr>
@@ -53,10 +53,8 @@
 {% endblock %}
 {% block script %}
 <script>
-    function deleteRow(ths){
-        var ths = $(ths);
-        
-        ths.parents("tr").remove();
+    function deleteRow(req_id){
+        document.getElementById(req_id).hidden = true;
     }
 </script>
 {% endblock %}    
