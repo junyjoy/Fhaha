@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, session, request, flash, url_for, g, Flask
 from werkzeug.utils import redirect
-from fhaa.models import Request, Subject, Hospital, HosSub
+from fhaa.models import Request, Subject, Hospital, HosSub, Matching
 import time, datetime
 from fhaa import db
 from fhaa.views.auth_views import login_required_for_patient, login_required_for_hospital
@@ -103,7 +103,7 @@ def board():
 
 
 
-@bp.route('/hospitals/')
+@bp.route('/hospitals/', methods = ['POST', 'GET'])   
 def hospital_list():
     """환자 관점에서 환자의 의뢰를 수락한 병원들의 목록을 보여줌.
 
@@ -112,14 +112,47 @@ def hospital_list():
         
     Authors: jlee <junlee9834@gmail.com>
     """
-    page = request.args.get('page', type=int, default=1)  # 페이지
-    print(page)
-    hospital_list = Request.query.join(Hospital).filter(Request.pat_ema==g.user.pat_ema, Request.req_chk==0)
-    for h in hospital_list:
-        print(h)
-    hospital_list = hospital_list.paginate(page=page, per_page=10)
+    
+    if request.method == 'POST':
+        check = request.form.get('check')
+        
+        # 환자가 `O` 버튼을 누르면
+        if check == "accept":
+            f_req_id = request.form.get('req_id')
+            requset_ = Request.query.filter(Request.req_id==f_req_id).first()
 
-    return render_template('request/hospital_list.html', hospital_list=hospital_list)
+            # Matching 테이블에 데이터 생성
+            matching = Matching(
+                req_id=requset_.req_id, 
+                pat_ema=requset_.pat_ema, 
+                hos_cid=requset_.hos_cid
+            )
+            db.session.add(matching)
+            
+            # Request 테이블에서 매칭되지 않은 의뢰를 제거
+            Request.query.filter(Request.req_id==f_req_id).first()
+            
+            db.session.commit()
+
+        # 환자가 `X` 버튼을 누르면
+        else:
+            f_req_id = request.form.get('req_id')
+            print(f_req_id)
+            request_ = Request.query.filter_by(req_id=f_req_id)
+            print(request_)
+            db.session.delete(request_.first())
+            db.session.commit()
+            
+        return redirect(url_for('request.matching'))
+            
+    page = request.args.get('page', type=int, default=1)  # 페이지
+    requset_list = Request.query.join(Hospital).filter(
+        Request.pat_ema==g.user.pat_ema, 
+        Request.req_chk==0, 
+    )
+    request_list = requset_list.paginate(page=page, per_page=10)
+
+    return render_template('request/hospital_list.html', request_list=request_list)
 
 
 
