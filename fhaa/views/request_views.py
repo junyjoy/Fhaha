@@ -69,8 +69,9 @@ def board():
     print(page)
     request_list = Request.query.filter_by(hos_cid=g.user.hos_cid).order_by(Request.req_id.desc())
     request_list = request_list.paginate(page=page, per_page=10)
-
+ 
     return render_template('request/user_list.html', request_list=request_list)
+
 
 @bp.route('/detail/<int:request_id>/')
 def detail(request_id):
@@ -78,14 +79,11 @@ def detail(request_id):
 
     return render_template('request/user_detail.html', request=request)
 
+
 @bp.route('/user_hoslist/')
 def user_list():
     page = request.args.get('page', type=int, default=1)  # 페이지
-    print(page)
-    
-    limit_datetime = datetime.strptime(Request.req_date, '%Y-%m-%d %H:%M:%S.%f') + datetime.timedelta(Request.req_time)
-    request_list = Request.query.filter(Request.pat_ema==g.user.pat_ema, Request.req_date > limit_datetime)
-    print(request_list.all())
+    request_list = Request.query.filter(Request.pat_ema==g.user.pat_ema)
     request_list = request_list.paginate(page=page, per_page=10)
 
     return render_template('request/user_list.html', request_list=request_list)
@@ -103,12 +101,12 @@ def hospital_list():
     """
     page = request.args.get('page', type=int, default=1)  # 페이지
     print(page)
-    request_list = Request.query.join(Hospital).filter(Request.pat_ema==g.user.pat_ema, Request.req_chk==0)
-    for r in request_list:
-        print(r.hos_name)
-    request_list = request_list.paginate(page=page, per_page=10)
+    hospital_list = Request.query.join(Hospital).filter(Request.pat_ema==g.user.pat_ema, Request.req_chk==0)
+    hospital_list = hospital_list.paginate(page=page, per_page=10)
 
-    return render_template('request/hospital_list.html', request_list=request_list)
+    return render_template('request/hospital_list.html', hospital_list=hospital_list)
+
+
 
 @bp.route('/match/done/')
 def match_():
@@ -119,30 +117,5 @@ def match_():
         print(user_id, user_name)
         return render_template('auth/congrats.html', user_id=user_id, user_name=user_name)
     else:
-        return redirect(url_for('main.index'))
-
-# @bp.route('/write/', methods=["GET"])
-# def write():
-#     addr = "서울시 강남구 학동로 171 "
-#     return render_template('request/write.html', addr = addr)
-    
-# bp.route('/write/', methods=["POST"])
-# def write_db():
-#     print('request.method', request.method)
-#     req_time = request.form.get('req_time')
-#     req_type = request.form.get('req_type') 
-#     req_req = request.form.get('req_req') 
-#     addr = "서울시 강남구 학동로 171 1,2층"
-#     req_loc = addr
-#     req_rid =""
-#     pat_ema = session['user_id']
-#     lt = time.localtime(time.time() + int(req_time) * 60)
-#     print(time.strftime('%Y-%m-%d %H:%M:%S', lt))
-#     print( req_time, req_type, req_req)
-#     req = Request(req_type, req_loc, lt, req_req,req_rid, pat_ema)
-           
-#     db.session.add(req)            
-#     db.session.commit()
-#     print(2)
-    
-#     return redirect(url_for('main.index'))
+        # return redirect(url_for('main.index'))
+        return render_template('request/matched.html')
