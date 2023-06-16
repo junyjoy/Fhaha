@@ -12,38 +12,38 @@
                 <th>병원명</th>
                 <th>병원 위치</th>
                 <th>전화번호</th>
-
+                <th>선택</th>
             </tr>
             </thead>
             <tbody>
-            {% if request_list %}
-            {% for request in request_list.items %}
+            {% if hospital_list %}
+            {% for hospital in hospital_list.items %}
             <tr>
                 <td>{{ loop.index }}</td>
                 <td>
-                    <a href="{{ url_for('request.detail', request_id=request.req_id) }}">{{ request.pat_ema }}</a>
+                    <a>{{ hospital.hos_name }}</a>
                 </td>
-                <td>{{ request.req_type }}</td>
-                <td>{{ request.req_loc }}</td>
-
+                <td>{{ hospital.hos_addr1 }}</td>
+                <td>{{ hospital.hos_tel }}</td>
+                <td>
+                    <div class="d-flex">
+                        <form action="{{ url_for('request.board') }}" method="POST">
+                            <input type="text" class="form-control" name="req_id" id="req_id" value="{{request.req_id}}" hidden>
+                            <input type="text" class="form-control" name="check" id="accept" value="accept" hidden>
+                            <button type="submit" class="btn btn-outline-success">◯</button>
+                        </form>
+                        <form action="{{ url_for('request.board') }}" method="POST">
+                            <input type="text" class="form-control" name="req_id" id="req_id" value="{{request.req_id}}" hidden>
+                            <input type="text" class="form-control" name="check" id="delete" value="delete" hidden>
+                            <button type="submit" class="btn btn-outline-danger">⨉</button>
+                        </form>
+                    </div>
+                </td>
             </tr>
             {% endfor %}
-            {% else %}
-            <tr>
-                <td colspan="3">질문이 없습니다.</td>
-            </tr>
             {% endif %}
             </tbody>
         </table>
     </div>
-    <!-- {% if request_list %}
-        <ul>
-        {% for request in request_list.items %}
-            <li><a href="{{ url_for('request.detail', request_id=request.req_id) }}">{{ request.req_type }}</a></li>
-        {% endfor %}
-        </ul>
-    {% else %}
-        <p>질문이 없습니다.</p>
-    {% endif %} -->
 </div>
 {% endblock %}
