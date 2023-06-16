@@ -25,12 +25,13 @@
                     <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" id="user">{{ g.user.hos_name }} 님</a>
                     {% endif %} 
                     <div class="dropdown-menu" aria-labelledby="user">
-                        <a class="dropdown-item" href="{{ url_for('login.logout')}}">Logout</a>
-                        <a class="dropdown-item" href="{{ url_for('change.change') }}">Edit account info</a>
+                        <a class="dropdown-item" href="{{ url_for('login.logout')}}">로그아웃</a>
+                        <a class="dropdown-item" href="{{ url_for('change.change') }}">개인정보수정</a>
                         {% if g.user_type == 'patient' %}
                         <a class="dropdown-item" href="{{ url_for('request.user_req') }}">의뢰하기</a>
+                        <a class="dropdown-item" href="{{ url_for('request.hospital_list') }}">응답한 병원 목록</a>
                         {% else %}
-                        <a class="dropdown-item" href="{{ url_for('request.board') }}">알림페이지</a>
+                        <a class="dropdown-item" href="{{ url_for('request.board') }}">들어온의뢰</a>
                         {% endif %} 
                         <!-- <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="../5/pulse/bootstrap.min.css" download="">bootstrap.min.css</a>
