@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, session, request, flash, url_for, g, Flask
 from werkzeug.utils import redirect
-from fhaa.models import Request, Subject
+from fhaa.models import Request, Subject, Hospital
 import time, datetime
 from fhaa import db
 from fhaa.views.auth_views import login_required_for_patient, login_required_for_hospital
@@ -26,22 +26,36 @@ def user_req() :
 
 @bp.route('/', methods = ['POST'])    
 def req_post() :
-    addr_now = "경기도 군포시 산본천로 12"
+    addr_now = request.form.get('location')
     f_req_type = request.form.get('req_type')
     f_req_time = request.form.get('req_time')
     f_pat_ema = session.get('user_id')
     f_req_date= datetime.datetime.now()
     f_req_req= request.form.get('req_req')
     
-    r=Request(req_type = f_req_type, 
-              req_loc = addr_now,
-              req_time = f_req_time,
-              req_req= f_req_req,
-              pat_ema = f_pat_ema,
-              req_date = f_req_date
-              )
-    db.session.add(r)            
+    # 가까운 병원 목록 만들기
+    # update by jlee
+    location_lat = float(request.form.get('location_lat'))
+    location_lon = float(request.form.get('location_lon'))
+    lat_KM = 0.0091
+    lon_KM = 0.0113
+    hospitals = Hospital.query.filter(Hospital.hos_lat >= location_lat-lat_KM, Hospital.hos_lat <= location_lat+lat_KM)\
+        .filter(Hospital.hos_lnt >= location_lon-lon_KM, Hospital.hos_lnt <= location_lon+lon_KM)
+    print(hospitals.all())
+    
+    for hospital in hospitals:
+        r = Request(
+                req_type = f_req_type, 
+                req_loc = addr_now,
+                req_time = f_req_time,
+                req_req= f_req_req,
+                pat_ema = f_pat_ema,
+                req_date = f_req_date,
+                hos_cid = hospital.hos_cid
+            )
+        db.session.add(r)            
     db.session.commit()
+    
     return redirect(url_for('main.index'))
 
 
@@ -50,7 +64,7 @@ def req_post() :
 def board():
     page = request.args.get('page', type=int, default=1)  # 페이지
     print(page)
-    request_list = Request.query.order_by(Request.req_id.desc())
+    request_list = Request.query.filter_by(hos_cid=g.user.hos_cid).order_by(Request.req_id.desc())
     request_list = request_list.paginate(page=page, per_page=10)
 
     return render_template('request/user_list.html', request_list=request_list)
