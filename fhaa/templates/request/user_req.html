@@ -1,11 +1,16 @@
+<<<<<<< HEAD
 {% extends 'base.html'%}
+{% block content %}
+<div class="container w-50 mb-3" style="margin-top: 8rem">
+=======
+{% extends 'base.html'%} {% block content %}
 <script>
   function finish() {
     alert("병원에 진료 요청이 완료되었습니다.");
   }
 </script>
-{% block content %}
 <div class="container w-50" style="margin-top: 8rem">
+>>>>>>> 9277e5936ab9346ab91637ffafe12202b0076ce1
   <div class="w-100 col-md-7 col-md-offset-2">
     <div class="page-hearder" style="padding-bottom: 20px">
       <h3>진료 요청</h3>
@@ -81,7 +86,11 @@
 </div>
 {% endblock %}
 {% block script %}
-
+<script>
+  function finish() {
+    alert("병원에 진료 요청이 완료되었습니다.");
+  }
+</script>
 <script type="text/javascript"
   src="//dapi.kakao.com/v2/maps/sdk.js?appkey=a402faa3e887603d2d2e512be8b710d1&libraries=services"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='map.js') }}"></script>
