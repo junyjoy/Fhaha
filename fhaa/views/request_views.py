@@ -110,6 +110,16 @@ def hospital_list():
 
     return render_template('request/hospital_list.html', request_list=request_list)
 
+@bp.route('/match/done/')
+def match_():
+    if request.method == 'POST' :
+        user_id = request.args.get('user_id')
+        request.get_data()
+        user_name = request.args.get('user_name')
+        print(user_id, user_name)
+        return render_template('auth/congrats.html', user_id=user_id, user_name=user_name)
+    else:
+        return redirect(url_for('main.index'))
 
 # @bp.route('/write/', methods=["GET"])
 # def write():
