@@ -150,16 +150,16 @@ def hospital_list():
         return redirect(url_for('request.board'))
             
     page = request.args.get('page', type=int, default=1)  # 페이지
-    requset_list =  Request.query.filter(
+    
+    # 이미 매칭된 request는 나오지 않도록 해야 함
+    # outterjoin 후 mat_id가 빈 것만 가져옴
+    request_list =  Request.query.outerjoin(Matching).filter(
         Request.pat_ema==g.user.pat_ema, 
-        Request.req_chk==0, 
-        Matching.req_id!=Request.req_id
+        Request.req_chk==0,    
+        Matching.mat_id==None
     )
 
-    # 이미 매칭된 request는 나오지 않도록 해야 함
-    # TODO 
-
-    request_list = requset_list.paginate(page=page, per_page=10)
+    request_list = request_list.paginate(page=page, per_page=10)
 
     return render_template('request/hospital_list.html', request_list=request_list)
 
