@@ -27,7 +27,18 @@
                 <td>{{ request.req_type }}</td>
                 <td>{{ request.req_loc }}</td>
                 <td>
-                    <button type="button" onclick="deleteRow('{{ request.req_id }}');">X</button>
+                    <div class="d-flex">
+                        <form action="{{ url_for('request.board') }}" method="POST">
+                            <input type="text" class="form-control" name="req_id" id="req_id" value="{{request.req_id}}" hidden>
+                            <input type="text" class="form-control" name="check" id="accept" value="accept" hidden>
+                            <button type="submit" class="btn btn-outline-success">◯</button>
+                        </form>
+                        <form action="{{ url_for('request.board') }}" method="POST">
+                            <input type="text" class="form-control" name="req_id" id="req_id" value="{{request.req_id}}" hidden>
+                            <input type="text" class="form-control" name="check" id="delete" value="delete" hidden>
+                            <button type="submit" class="btn btn-outline-danger">⨉</button>
+                        </form>
+                    </div>
                 </td>
 
             </tr>
@@ -51,10 +62,3 @@
     {% endif %} -->
 </div>
 {% endblock %}
-{% block script %}
-<script>
-    function deleteRow(req_id){
-        document.getElementById(req_id).hidden = true;
-    }
-</script>
-{% endblock %}    

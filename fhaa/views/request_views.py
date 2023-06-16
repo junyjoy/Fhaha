@@ -66,15 +66,15 @@ def req_post() :
     return redirect(url_for('main.index'))
 
 
-@bp.route('/board/')
-@login_required_for_hospital
-def board():
-    page = request.args.get('page', type=int, default=1)  # 페이지
-    print(page)
-    request_list = Request.query.filter_by(hos_cid=g.user.hos_cid).order_by(Request.req_id.desc())
-    request_list = request_list.paginate(page=page, per_page=10)
+# @bp.route('/board/')
+# @login_required_for_hospital
+# def board():
+#     page = request.args.get('page', type=int, default=1)  # 페이지
+#     print(page)
+#     request_list = Request.query.filter_by(hos_cid=g.user.hos_cid).order_by(Request.req_id.desc())
+#     request_list = request_list.paginate(page=page, per_page=10)
 
-    return render_template('request/user_list.html', request_list=request_list)
+#     return render_template('request/user_list.html', request_list=request_list)
 
 @bp.route('/detail/<int:request_id>/')
 def detail(request_id):
@@ -82,16 +82,45 @@ def detail(request_id):
 
     return render_template('request/user_detail.html', request=request)
 
-@bp.route('/user_hoslist/')
-def user_list():
+# @bp.route('/user_hoslist/')
+# def user_list():
+#     page = request.args.get('page', type=int, default=1)  # 페이지
+#     print(page)
+#     request_list = Request.query.filter_by(pat_ema=g.user.pat_ema)
+#     request_list = request_list.paginate(page=page, per_page=10)
+
+#     return render_template('request/user_list.html', request_list=request_list)
+
+@bp.route('/board/', methods = ['POST', 'GET'])   
+@login_required_for_hospital
+def board():
+    
+    if request.method == 'POST':
+        check = request.form.get('check')
+
+        if check == "accept":
+            f_req_id = request.form.get('req_id')
+            print(f_req_id)
+            request_ = Request.query.filter_by(req_id=f_req_id)
+            request_.update(dict(req_chk=0))
+            print(request_)
+            db.session.add(request_.first())
+            db.session.commit()
+        else:
+            f_req_id = request.form.get('req_id')
+            print(f_req_id)
+            request_ = Request.query.filter_by(req_id=f_req_id)
+            print(request_)
+            db.session.delete(request_.first())
+            db.session.commit()
+
+        return redirect(url_for('request.board'))
+    
     page = request.args.get('page', type=int, default=1)  # 페이지
-    print(page)
-    request_list = Request.query.filter_by(pat_ema=g.user.pat_ema)
+    request_list = Request.query.filter_by(hos_cid=g.user.hos_cid, req_chk=1)
     request_list = request_list.paginate(page=page, per_page=10)
 
     return render_template('request/user_list.html', request_list=request_list)
-
-
 
 # @bp.route('/write/', methods=["GET"])
 # def write():
