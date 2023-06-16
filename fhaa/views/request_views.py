@@ -182,12 +182,14 @@ def matching():
     '''
     page = request.args.get('page', type=int, default=1)  # 페이지
     print(page)
-    # request_list = Request.query.join(Hospital).filter(Request.pat_ema==g.user.pat_ema, Matching.mat_chk==0)
 
-    matching_list = Matching.query.filter(Matching.pat_ema==g.user.pat_ema)
-    for m in matching_list:
-        print(m.hospital.hos_name)
-        print(m.req.pat_ema)
+    if g.user_type == "patient":
+        matching_list = Matching.query.filter(Matching.pat_ema==g.user.pat_ema)
+    elif g.user_type == "hospital":
+        matching_list = Matching.query.filter(Matching.hos_cid==g.user.hos_cid)
+    else:
+        return redirect(url_for('main.index'))
+     
     matching_list = matching_list.paginate(page=page, per_page=10)
 
     return render_template('request/match_status.html', matching_list=matching_list)
