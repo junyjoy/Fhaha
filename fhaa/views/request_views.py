@@ -34,20 +34,16 @@ def req_post() :
     f_req_req= request.form.get('req_req')
     
     # 가까운 병원 목록 만들기
-    # update by jlee
+    # update by jlee <junlee9834@gmail.com>
     location_lat = float(request.form.get('location_lat'))
     location_lon = float(request.form.get('location_lon'))
     lat_KM = 0.0091
     lon_KM = 0.0113
-    # hospitals = Hospital.query.filter(Hospital.hos_lat >= location_lat-lat_KM, Hospital.hos_lat <= location_lat+lat_KM)\
-    #     .filter(Hospital.hos_lnt >= location_lon-lon_KM, Hospital.hos_lnt <= location_lon+lon_KM)
-    
-    hospitals = Hospital.query.join(HosSub).join(Subject).filter(Subject.ill_type==f_req_type)\
+    hospitals = Hospital.query.join(HosSub).join(Subject)\
+        .filter(Subject.ill_type==f_req_type)\
         .filter(Hospital.hos_lat >= location_lat-lat_KM, Hospital.hos_lat <= location_lat+lat_KM)\
         .filter(Hospital.hos_lnt >= location_lon-lon_KM, Hospital.hos_lnt <= location_lon+lon_KM)
     
-    
-    # print(hospitals.all())
     
     for hospital in hospitals:
         print(hospital.hos_addr1)
@@ -61,7 +57,7 @@ def req_post() :
                 hos_cid = hospital.hos_cid
             )
         db.session.add(r)          
-    db.session.commit()
+    db.session.commit() 
     
     return redirect(url_for('main.index'))
 
@@ -86,11 +82,33 @@ def detail(request_id):
 def user_list():
     page = request.args.get('page', type=int, default=1)  # 페이지
     print(page)
-    request_list = Request.query.filter_by(pat_ema=g.user.pat_ema)
+    
+    limit_datetime = datetime.strptime(Request.req_date, '%Y-%m-%d %H:%M:%S.%f') + datetime.timedelta(Request.req_time)
+    request_list = Request.query.filter(Request.pat_ema==g.user.pat_ema, Request.req_date > limit_datetime)
+    print(request_list.all())
     request_list = request_list.paginate(page=page, per_page=10)
 
     return render_template('request/user_list.html', request_list=request_list)
 
+
+
+@bp.route('/hospitals/')
+def hospital_list():
+    """환자 관점에서 환자의 의뢰를 수락한 병원들의 목록을 보여줌.
+
+    Returns:
+        render_template: request/hospital_list.html
+        
+    Authors: jlee <junlee9834@gmail.com>
+    """
+    page = request.args.get('page', type=int, default=1)  # 페이지
+    print(page)
+    request_list = Request.query.join(Hospital).filter(Request.pat_ema==g.user.pat_ema, Request.req_chk==0)
+    for r in request_list:
+        print(r.hos_name)
+    request_list = request_list.paginate(page=page, per_page=10)
+
+    return render_template('request/hospital_list.html', request_list=request_list)
 
 
 # @bp.route('/write/', methods=["GET"])
