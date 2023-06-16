@@ -4,46 +4,50 @@
     <!-- 질문 목록 -->
     <div class="container my-3">
         <table class="table">
-            <h2 class="ml-auto">응답한 병원</h2>
+            <h2 class="ml-auto">진료 가능한 병원</h2>
 
             <thead>
             <tr class="table-secondary">
                 <th>순번</th>
+                <th>진료과목</th>
                 <th>병원명</th>
                 <th>병원 위치</th>
                 <th>전화번호</th>
-
+                <th>선택</th>
             </tr>
             </thead>
             <tbody>
             {% if request_list %}
-            {% for request in request_list.items %}
-            <tr>
-                <td>{{ loop.index }}</td>
-                <td>
-                    <a href="{{ url_for('request.detail', request_id=request.req_id) }}">{{ request.pat_ema }}</a>
-                </td>
-                <td>{{ request.req_type }}</td>
-                <td>{{ request.req_loc }}</td>
-
-            </tr>
-            {% endfor %}
-            {% else %}
-            <tr>
-                <td colspan="3">질문이 없습니다.</td>
-            </tr>
+                {% for request in request_list.items %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td><a>{{ request.req_type }}</a></td>
+                    <td><a>{{ request.hospital.hos_name }}</a></td>
+                    {% if request.hospital.hos_addr2 %}
+                        <td> {{ ", ".join((request.hospital.hos_addr1,request.hospital.hos_addr2)) }}</td>
+                    {% else %}
+                        <td> {{ request.hospital.hos_addr1 }}</td>
+                    {% endif %}
+                    <td>{{ request.hospital.hos_tel }}</td>
+                    <td>
+                        <div class="d-flex">
+                            <form action="{{ url_for('request.hospital_list') }}" method="POST">
+                                <input type="text" class="form-control" name="req_id" id="req_id" value="{{request.req_id}}" hidden>
+                                <input type="text" class="form-control" name="check" id="accept" value="accept" hidden>
+                                <button type="submit" class="btn btn-outline-success">◯</button>
+                            </form>
+                            <form action="{{ url_for('request.hospital_list') }}" method="POST">
+                                <input type="text" class="form-control" name="req_id" id="req_id" value="{{request.req_id}}" hidden>
+                                <input type="text" class="form-control" name="check" id="delete" value="delete" hidden>
+                                <button type="submit" class="btn btn-outline-danger">⨉</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
             {% endif %}
             </tbody>
         </table>
     </div>
-    <!-- {% if request_list %}
-        <ul>
-        {% for request in request_list.items %}
-            <li><a href="{{ url_for('request.detail', request_id=request.req_id) }}">{{ request.req_type }}</a></li>
-        {% endfor %}
-        </ul>
-    {% else %}
-        <p>질문이 없습니다.</p>
-    {% endif %} -->
 </div>
 {% endblock %}

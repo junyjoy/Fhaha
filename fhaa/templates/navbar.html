@@ -9,7 +9,7 @@
         <div class="navbar-collapse collapse" id="navbarResponsive">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('request.user_req') }}">매칭상태</a>
+                    <a class="nav-link" href="{{ url_for('request.matching') }}">매칭상태</a>
                 </li>
                 {% if g.user_type == 'patient' %}      
                 <!-- 환자일 경우에는 의뢰하기, 응답한 병원 목록만 네비바에 표시 -->

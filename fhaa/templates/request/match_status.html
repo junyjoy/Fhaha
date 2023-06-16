@@ -17,17 +17,18 @@
             </tr>
             </thead>
             <tbody>
-            {% if request_list %}
-            {% for request in request_list.items %}
+            {% if matching_list %}
+            {% for request in matching_list.items %}
                 <tr>
                     <td>{{ loop.index }}</td>
-                    <td>
-                        <a href="{{ url_for('request.detail', request_id=request.req_id) }}">{{ request.pat_ema }}</a>
-                    </td>
-                    <td>{{ request.req_type }}</td>
-                    
-                    <td>{{ request.req_loc }}</td>
-    
+                    <td>{{ request.pat_ema }}</td>
+                    <td>{{ request.req.req_type }}</td>
+                    <td>{{ request.hospital.hos_name }}</td>
+                    {% if request.hospital.hos_addr2 %}
+                        <td> {{ ", ".join((request.hospital.hos_addr1,request.hospital.hos_addr2)) }}</td>
+                    {% else %}
+                        <td> {{ request.hospital.hos_addr1 }}</td>
+                    {% endif %}
                 </tr>
             {% endfor %}
             {% else %}

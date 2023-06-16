@@ -62,15 +62,6 @@ def req_post() :
     return redirect(url_for('main.index'))
 
 
-# @bp.route('/board/')
-# @login_required_for_hospital
-# def board():
-#     page = request.args.get('page', type=int, default=1)  # 페이지
-#     print(page)
-#     request_list = Request.query.filter_by(hos_cid=g.user.hos_cid).order_by(Request.req_id.desc())
-#     request_list = request_list.paginate(page=page, per_page=10)
-
-#     return render_template('request/user_list.html', request_list=request_list)
 
 @bp.route('/detail/<int:request_id>/')
 def detail(request_id):
@@ -78,16 +69,9 @@ def detail(request_id):
 
     return render_template('request/user_detail.html', request=request)
 
-# @bp.route('/user_hoslist/')
-# def user_list():
-#     page = request.args.get('page', type=int, default=1)  # 페이지
-#     print(page)
-#     request_list = Request.query.filter_by(pat_ema=g.user.pat_ema)
-#     request_list = request_list.paginate(page=page, per_page=10)
-
-#     return render_template('request/user_list.html', request_list=request_list)
 
 @bp.route('/board/', methods = ['POST', 'GET'])   
+@login_required_all
 @login_required_for_hospital
 def board():
     
@@ -120,7 +104,7 @@ def board():
 
 
 
-@bp.route('/hospitals/')
+@bp.route('/hospitals/', methods = ['POST', 'GET'])   
 def hospital_list():
     """환자 관점에서 환자의 의뢰를 수락한 병원들의 목록을 보여줌.
 
@@ -129,14 +113,57 @@ def hospital_list():
         
     Authors: jlee <junlee9834@gmail.com>
     """
+    
+    if request.method == 'POST':
+        check = request.form.get('check')
+        
+        # 환자가 `O` 버튼을 누르면
+        if check == "accept":
+            f_req_id = request.form.get('req_id')
+            requset_ = Request.query.filter(Request.req_id==f_req_id).first()
+
+            # Matching 테이블에 데이터 생성
+            matching = Matching(
+                req_id=requset_.req_id, 
+                pat_ema=requset_.pat_ema, 
+                hos_cid=requset_.hos_cid
+            )
+            db.session.add(matching)
+            
+            # Request 테이블에서 매칭되지 않은 의뢰를 제거
+            request_del = Request.query.filter(
+                Request.req_date==requset_.req_date, 
+                Request.req_chk==1
+            )
+            for r in request_del.all():
+                db.session.delete(r)
+            db.session.commit()
+
+        # 환자가 `X` 버튼을 누르면
+        else:
+            f_req_id = request.form.get('req_id')
+            print(f_req_id)
+            request_ = Request.query.filter_by(req_id=f_req_id)
+            db.session.delete(request_.first())
+            db.session.commit()
+            
+        return redirect(url_for('request.board'))
+            
     page = request.args.get('page', type=int, default=1)  # 페이지
-    print(page)
-    request_list = Request.query.join(Hospital).filter(Request.pat_ema==g.user.pat_ema, Request.req_chk==0)
-    for r in request_list:
-        print(r.hospital.hos_name)
-    request_list = request_list.paginate(page=page, per_page=10)
+    requset_list =  Request.query.filter(
+        Request.pat_ema==g.user.pat_ema, 
+        Request.req_chk==0, 
+        Matching.req_id!=Request.req_id
+    )
+
+    # 이미 매칭된 request는 나오지 않도록 해야 함
+    # TODO 
+
+    request_list = requset_list.paginate(page=page, per_page=10)
 
     return render_template('request/hospital_list.html', request_list=request_list)
+
+
 
 @bp.route('/match/done/')
 def match_():
@@ -155,36 +182,14 @@ def matching():
     '''
     page = request.args.get('page', type=int, default=1)  # 페이지
     print(page)
-    request_list = Request.query.join(Hospital).filter(Request.pat_ema==g.user.pat_ema, Matching._chk==0)
-    for r in request_list:
-        print(r.hospital.hos_name)
-    request_list = request_list.paginate(page=page, per_page=10)
+    # request_list = Request.query.join(Hospital).filter(Request.pat_ema==g.user.pat_ema, Matching.mat_chk==0)
 
-    return render_template('request/hospital_list.html', request_list=request_list)
+    matching_list = Matching.query.filter(Matching.pat_ema==g.user.pat_ema)
+    for m in matching_list:
+        print(m.hospital.hos_name)
+        print(m.req.pat_ema)
+    matching_list = matching_list.paginate(page=page, per_page=10)
+
+    return render_template('request/match_status.html', matching_list=matching_list)
 
 
-# @bp.route('/write/', methods=["GET"])
-# def write():
-#     addr = "서울시 강남구 학동로 171 "
-#     return render_template('request/write.html', addr = addr)
-    
-# bp.route('/write/', methods=["POST"])
-# def write_db():
-#     print('request.method', request.method)
-#     req_time = request.form.get('req_time')
-#     req_type = request.form.get('req_type') 
-#     req_req = request.form.get('req_req') 
-#     addr = "서울시 강남구 학동로 171 1,2층"
-#     req_loc = addr
-#     req_rid =""
-#     pat_ema = session['user_id']
-#     lt = time.localtime(time.time() + int(req_time) * 60)
-#     print(time.strftime('%Y-%m-%d %H:%M:%S', lt))
-#     print( req_time, req_type, req_req)
-#     req = Request(req_type, req_loc, lt, req_req,req_rid, pat_ema)
-           
-#     db.session.add(req)            
-#     db.session.commit()
-#     print(2)
-    
-#     return redirect(url_for('main.index'))

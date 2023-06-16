@@ -1,3 +1,7 @@
+# .cmd
+activate.cmd
+
+
 # flask
 migrations/
 *.db
