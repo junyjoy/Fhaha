@@ -103,8 +103,8 @@ class UserUpdateForm(FlaskForm):
     
     """
     old_password = PasswordField('비밀번호', validators=[DataRequired('기존 비밀번호는 필수로 입력해 주세요.')])
-    new_password1 = PasswordField('비밀번호', validators=[Length(min=8, message='8자리 이상 입력해 주세요.')])
-    new_password2 = PasswordField('비밀번호확인', validators=[EqualTo('new_password1', '비밀번호가 일치하지 않습니다.')])
+    new_password1 = PasswordField('비밀번호', validators=[])
+    new_password2 = PasswordField('비밀번호확인', validators=[EqualTo('new_password1', '비밀번호가 일치하지 않습니다.'), Length(min=8, message='8자리 이상 입력해 주세요.')])
     name = StringField('이름', validators=[DataRequired('값이 비었습니다.'), Length(min=2, max=20)])
     phone = StringField('연락처', validators=[DataRequired('값이 비었습니다.'), Length(min=11, max=11, message='- 없이 11자리 입력해 주세요.')])    
     
@@ -125,7 +125,7 @@ class HospitalUpdateForm(FlaskForm):
         
     old_password = PasswordField('비밀번호', validators=[DataRequired('기존 비밀번호는 필수로 입력해 주세요.')])
     new_password1 = PasswordField('비밀번호', validators=[Length(min=8, message='8자리 이상 입력해 주세요.')])
-    new_password2 = PasswordField('비밀번호확인', validators=[EqualTo('new_password1', '비밀번호가 일치하지 않습니다.')])
+    new_password2 = PasswordField('비밀번호확인', validators=[EqualTo('new_password1', '비밀번호가 일치하지 않습니다.'), Length(min=8, message='8자리 이상 입력해 주세요.')])
     name = StringField('병원명', validators=[DataRequired('값이 비었습니다.'), Length(min=2, max=100)])
     address1 = StringField('병원 주소', validators=[DataRequired('값이 비었습니다.'), Length(min=2, max=100, message='주소를 다시 입력해 주세요.')])
     address2 = StringField('병원 상세주소', validators=[DataRequired('값이 비었습니다.'), Length(min=2, max=100, message='상세주소를 다시 입력해 주세요.')])
