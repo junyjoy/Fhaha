@@ -124,6 +124,7 @@ def hospital_list():
             
             # Request 테이블에서 매칭되지 않은 의뢰를 제거
             request_del = Request.query.filter(
+                Request.pat_ema==request_.pat_ema,
                 Request.req_date==requset_.req_date, 
                 Request.req_chk==1
             )
@@ -155,7 +156,7 @@ def hospital_list():
 
     request_list = request_list.paginate(page=page, per_page=10)
 
-    return render_template('request/hospital_list.html', request_list=request_list)
+    return render_template('request/hospital_list.html', request_list=request_list, datetime=datetime)
 
 
 @bp.route('/match/status/')

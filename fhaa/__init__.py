@@ -51,4 +51,10 @@ def create_app():
     app.register_blueprint(change_views.bp)
     app.register_blueprint(request_views.bp)
     
+    # filter
+    from .filter import add_datetime
+    app.jinja_env.filters['add_datetime'] = add_datetime
+    
+    
+    
     return app

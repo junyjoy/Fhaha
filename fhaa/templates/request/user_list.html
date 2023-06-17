@@ -34,7 +34,8 @@
                 </td>
                 <td>{{ request.req_type }}</td>
                 <td>{{ request.req_loc }}</td>
-                <td>{{ request.req_date  }}</td>
+                {% set args = { 'req_date': request.req_date, 'req_time': request.req_time } %}
+                <td>{{ args | add_datetime }}</td>
                 <!-- test -->
                 <td class="w-25 text-left">
                     <div class="panel-faq-container">
@@ -63,7 +64,7 @@
             {% endfor %}
             {% else %}
             <tr>
-                <td colspan="3">질문이 없습니다.</td>
+                <td colspan="3">목록이 없습니다.</td>
             </tr>
             {% endif %}
             </tbody>
