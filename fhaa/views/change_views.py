@@ -51,7 +51,7 @@ def change_patient():
             db.session.add(user.first())
             db.session.commit()
         else:
-            flash('비밀번호 틀림ㅋㅋ')
+            flash('비밀번호가 일치하지 않습니다.')
         
         return redirect(url_for('change.change_patient'))
     
@@ -102,7 +102,7 @@ def change_hospital():
             db.session.add(user.first())
             db.session.commit()
         else:
-            flash('비밀번호 틀림ㅋㅋ')
+            flash('비밀번호가 일치하지 않습니다.')
         
         return redirect(url_for('change.change_hospital'))
     

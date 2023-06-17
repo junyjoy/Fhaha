@@ -23,7 +23,7 @@ def pat_login():
         if not user:
             error = "존재하지 않는 사용자입니다."
         elif not check_password_hash(user.pat_pw, form.password.data):
-            error = "비밀번호를 잘못 입력하셨습니다."
+            error = "비밀번호가 일치하지 않습니다."
         if error is None:
             session.clear()
             session['user_id'] = user.pat_ema
@@ -42,7 +42,7 @@ def hos_login():
         if not user:
             error = "존재하지 않는 사용자입니다."
         elif not check_password_hash(user.hos_pwd, form.password.data):
-            error = "비밀번호를 잘못 입력하셨습니다."
+            error = "비밀번호가 일치하지 않습니다."
         if error is None:
             session.clear()
             session['user_id'] = user.hos_cid
