@@ -164,19 +164,8 @@ def hospital_list():
     return render_template('request/hospital_list.html', request_list=request_list)
 
 
-
-@bp.route('/match/done/')
-def match_():
-    if request.method == 'POST' :
-        user_id = request.args.get('user_id')
-        request.get_data()
-        user_name = request.args.get('user_name')
-        print(user_id, user_name)
-        return render_template('auth/congrats.html', user_id=user_id, user_name=user_name)
-    else:
-        return redirect(url_for('main.index'))
-
 @bp.route('/match/status/')
+@login_required_all
 def matching():
     '''환자와 병원 모두 현재 매칭 상태를 보여줌.
     '''
@@ -195,3 +184,15 @@ def matching():
     return render_template('request/match_status.html', matching_list=matching_list)
 
 
+
+@bp.route('/match/done/')
+@login_required_all
+def match_():
+    if request.method == 'POST' :
+        user_id = request.args.get('user_id')
+        request.get_data()
+        user_name = request.args.get('user_name')
+        print(user_id, user_name)
+        return render_template('auth/congrats.html', user_id=user_id, user_name=user_name)
+    else:
+        return redirect(url_for('main.index'))

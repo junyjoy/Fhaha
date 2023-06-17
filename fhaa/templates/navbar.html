@@ -8,48 +8,48 @@
         </button>
         <div class="navbar-collapse collapse" id="navbarResponsive">
             <ul class="navbar-nav">
+                <!-- 환자일 경우에는 의뢰하기, 응답한 병원 목록만 네비바에 표시 -->
+                {% if g.user_type == 'patient' %}      
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('request.user_req') }}">진료요청</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('request.hospital_list') }}">병원목록</a>
+                    </li>
+                <!-- 병원일 경우 들어온 의뢰 페이지만 네비바에 표시 -->
+                {% else %}
+                    <li>
+                        <a class="nav-link" href="{{url_for('request.board')}}">요청목록</a> 
+                    </li>
+                {% endif %}
+
+                <!-- 매칭상태는 환자/병원 모두 표시 -->
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('request.matching') }}">매칭상태</a>
                 </li>
-                {% if g.user_type == 'patient' %}      
-                <!-- 환자일 경우에는 의뢰하기, 응답한 병원 목록만 네비바에 표시 -->
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('request.user_req') }}">의뢰하기</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('request.hospital_list') }}">응답한 병원 목록</a>
-                </li>
-                {% else %}
-                <!-- 병원일 경우 들어온 의뢰페이자만 네비바에 표시 -->
-                <li>
-                    <a class="nav-link" href="{{url_for('request.board')}}">들어온 의뢰</a> 
-                </li>
-                {% endif %}
             
             </ul>
             <ul class="navbar-nav ms-md-auto">
+                <!-- 로그인을 한 상태이면 -->
                 {% if g.user %}
-                <li class="nav-item dropdown">
-                    {% if g.user_type == "patient" %}
-                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" id="user">{{ g.user.pat_name }} 님</a>
-                    {% else %}
-                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" id="user">{{ g.user.hos_name }} 님</a>
-                    {% endif %} 
-                    <div class="dropdown-menu" aria-labelledby="user">
-                        <a class="dropdown-item" href="{{ url_for('login.logout')}}">로그아웃</a>
-                        <a class="dropdown-item" href="{{ url_for('change.change') }}">개인정보수정</a>
-                        <!-- <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="../5/pulse/bootstrap.min.css" download="">bootstrap.min.css</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="../5/pulse/_variables.scss" download="">_variables.scss</a> -->
-                    </div>
-                </li>
+                    <li class="nav-item dropdown">
+                        {% if g.user_type == "patient" %}
+                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" id="user">{{ g.user.pat_name }} 님</a>
+                        {% else %}
+                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" id="user">{{ g.user.hos_name }} 님</a>
+                        {% endif %} 
+                        <div class="dropdown-menu" aria-labelledby="user">
+                            <a class="dropdown-item" href="{{ url_for('login.logout')}}">로그아웃</a>
+                            <a class="dropdown-item" href="{{ url_for('change.change') }}">개인정보수정</a>
+                        </div>
+                    </li>
+                <!-- 로그인을 하지 않은 상태이면 -->
                 {% else %}
                     <li class="nav-item">
-                        <a rel="noopener" class="nav-link" href="{{ url_for('auth.signup') }}"> Signup</a>
+                        <a rel="noopener" class="nav-link" href="{{ url_for('auth.signup') }}">회원가입</a>
                     </li>
                     <li class="nav-item">
-                        <a rel="noopener" class="nav-link" href="{{ url_for('login.login') }}">Login</a>
+                        <a rel="noopener" class="nav-link" href="{{ url_for('login.login') }}">로그인</a>
                     </li>
                 {% endif %} 
             </ul>
