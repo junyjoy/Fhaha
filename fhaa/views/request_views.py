@@ -35,7 +35,8 @@ def req_post() :
         .filter(Subject.ill_type==f_req_type)\
         .filter(Hospital.hos_lat >= location_lat-lat_KM, Hospital.hos_lat <= location_lat+lat_KM)\
         .filter(Hospital.hos_lnt >= location_lon-lon_KM, Hospital.hos_lnt <= location_lon+lon_KM)
-    
+    print(location_lat-lat_KM, location_lat+lat_KM)
+    print(location_lon-lon_KM, location_lon+lon_KM)
     
     for hospital in hospitals:
         print(hospital.hos_addr1)
@@ -155,6 +156,7 @@ def hospital_list():
     )
 
     request_list = request_list.paginate(page=page, per_page=10)
+    print(request_list)
 
     return render_template('request/hospital_list.html', request_list=request_list, datetime=datetime)
 

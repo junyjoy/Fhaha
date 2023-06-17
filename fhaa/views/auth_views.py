@@ -65,8 +65,8 @@ def hospital_signup():
                             hos_addr1=form.address1.data,
                             hos_addr2=form.address2.data,
                             hos_tel=form.tel.data,
-                            hos_lat=hospital_location[0],
-                            hos_lnt=hospital_location[1],
+                            hos_lat=str(hospital_location[0]),
+                            hos_lnt=str(hospital_location[1]),
                             hos_type=''
                         )
                 db.session.add(user)
