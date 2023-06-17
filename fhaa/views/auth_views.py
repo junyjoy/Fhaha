@@ -88,12 +88,16 @@ def hospital_signup():
         return redirect(url_for('main.index'))
 
 
-@bp.route('/congrats', methods=('POST',))
+@bp.route('/congrats', methods=('GET', 'POST'))
 def congrats():
-    user_id = request.args.get('user_id')
-    user_name = request.args.get('user_name')
-    return render_template('auth/congrats.html', user_id=user_id, user_name=user_name)
-
+    if request.method == 'POST' :
+        user_id = request.args.get('user_id')
+        request.get_data()
+        user_name = request.args.get('user_name')
+        print(user_id, user_name)
+        return render_template('auth/congrats.html', user_id=user_id, user_name=user_name)
+    else:
+        return redirect(url_for('main.index'))
 
 
 def login_required_all(view):
@@ -102,7 +106,8 @@ def login_required_all(view):
     @functools.wraps(view)
     def wrapped_view(*args, **kwargs):
         if g.user is None:
-            return redirect(url_for('login.login'))
+            _next = request.url if request.method == 'GET' else ''
+            return redirect(url_for('login.login', next=_next))
         return view(*args, **kwargs)
     return wrapped_view
 

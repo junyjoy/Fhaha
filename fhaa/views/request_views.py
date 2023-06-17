@@ -6,15 +6,7 @@ from fhaa import db
 from fhaa.views.auth_views import login_required_for_patient, login_required_for_hospital, login_required_all
 
 bp = Blueprint('request', __name__, url_prefix='/request')
-#app = Flask(__name__)
 
-# @bp.route('/list')
-# def _list():
-#     return render_template('request/list.html')
-
-# @bp.route('/view')
-# def views():
-#     return render_template('request/view.html')
 
 @bp.route('/', methods = ['GET'])    
 @login_required_for_patient
@@ -137,22 +129,24 @@ def hospital_list():
             )
             for r in request_del.all():
                 db.session.delete(r)
+                
             db.session.commit()
 
         # 환자가 `X` 버튼을 누르면
         else:
+            # Request 테이블에서 해당 요청을 제거
             f_req_id = request.form.get('req_id')
-            print(f_req_id)
             request_ = Request.query.filter_by(req_id=f_req_id)
             db.session.delete(request_.first())
             db.session.commit()
             
         return redirect(url_for('request.board'))
             
+            
     page = request.args.get('page', type=int, default=1)  # 페이지
     
     # 이미 매칭된 request는 나오지 않도록 해야 함
-    # outterjoin 후 mat_id가 빈 것만 가져옴
+    # outerjoin 후 mat_id가 빈 것(매칭되지 않은 것)만 가져옴 
     request_list =  Request.query.outerjoin(Matching).filter(
         Request.pat_ema==g.user.pat_ema, 
         Request.req_chk==0,    

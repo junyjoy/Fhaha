@@ -4,10 +4,11 @@
     <!-- 질문 목록 -->
     <div class="container my-3">
         <table class="table">
-            
+
             <h2 class="ml-auto">요청목록</h2>
             <div class="alert alert-primary alert-dismissible fade show" role="alert">
-                진료를 요청한 환자들의 목록입니다.
+                진료를 요청한 환자들의 목록입니다.</p> <!-- 줄 바꿈 용도의 p tag -->
+                요청사항을 클릭해 자세한 내용을 확인할 수 있습니다.
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
 
@@ -17,7 +18,8 @@
                 <th>환자 email</th>
                 <th>진료과목</th>
                 <th>환자 현재 위치</th>
-                <th>만료기한</th>
+                <th>진료 희망시간</th>
+                <th>요청사항</th>
                 <th>선택</th>
 
             </tr>
@@ -33,13 +35,23 @@
                 <td>{{ request.req_type }}</td>
                 <td>{{ request.req_loc }}</td>
                 <td>{{ request.req_date  }}</td>
+                <!-- test -->
+                <td class="w-25 text-left">
+                    <div class="panel-faq-container">
+                        <p class="panel-faq-title text-primary">{{ request.req_req | truncate(20) }}</p>
+                        <div class="panel-faq-answer">
+                            <p>{{ request.req_req }}</p>
+                        </div>
+                    </div>
+                </td>
                 <td>
-                    <div class="d-flex">
-                        <form action="{{ url_for('request.board') }}" method="POST">
+                    <div class="btn-group" role="group">
+                        <form class="mr-1" action="{{ url_for('request.board') }}" method="POST">
                             <input type="text" class="form-control" name="req_id" id="req_id" value="{{request.req_id}}" hidden>
                             <input type="text" class="form-control" name="check" id="accept" value="accept" hidden>
                             <button type="submit" class="btn btn-outline-success">◯</button>
                         </form>
+                        <br/>
                         <form action="{{ url_for('request.board') }}" method="POST">
                             <input type="text" class="form-control" name="req_id" id="req_id" value="{{request.req_id}}" hidden>
                             <input type="text" class="form-control" name="check" id="delete" value="delete" hidden>
@@ -67,4 +79,69 @@
         <p>질문이 없습니다.</p>
     {% endif %} -->
 </div>
+{% endblock %}
+
+
+{% block script %}
+<script>
+window.onload = () => {
+// panel-faq-container
+const panelFaqContainer = document.querySelectorAll(".panel-faq-container"); // NodeList 객체
+
+// panel-faq-answer
+let panelFaqAnswer = document.querySelectorAll(".panel-faq-answer");
+
+// btn-all-close
+const btnAllClose = document.querySelector("#btn-all-close");
+
+// 반복문 순회하면서 해당 FAQ제목 클릭시 콜백 처리
+for( let i=0; i < panelFaqContainer.length; i++ ) { 
+    panelFaqContainer[i].addEventListener('click', function() { // 클릭시 처리할 일 
+        // FAQ 제목 클릭시 -> 본문이 보이게끔 -> active 클래스 추가
+    panelFaqAnswer[i].classList.toggle('active');
+    });
+    };
+
+    btnAllClose.addEventListener('click', function() {
+    // 버튼 클릭시 처리할 일
+    for(let i=0; i < panelFaqAnswer.length; i++) { panelFaqAnswer[i].classList.remove('active'); }; }); }
+</script>
+{% endblock %}
+
+{% block style %}
+<style>
+.panel-faq-container {
+margin-bottom: -16px;
+}
+.panel-faq-title {
+cursor: pointer;
+overflow: hidden;
+white-space: nowrap;
+}
+.panel-faq-answer {
+height: 0;
+overflow: hidden;
+/* 변화가 시작되는 쪽에다가 transition 적용해준다 0 -> 300px
+왜? 닫기 버튼을 누를 때 변화가 티남 */
+transition: all 0.3s;
+}
+#btn-all-close {
+margin-bottom: 10px;
+border: none;
+cursor: pointer;
+padding: 10px 25px;
+float: right;
+}
+#btn-all-close:hover {
+background-color: yellow;
+color: #000;
+transition: all 0.2;
+}
+.active {
+display: block;
+/* 높이를 정해줘야지만 transition이 적용됨 */
+height: 100px;
+overflow: scroll;
+}
+</style>
 {% endblock %}
