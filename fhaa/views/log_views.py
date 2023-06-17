@@ -21,9 +21,9 @@ def pat_login():
         error = None
         user = User.query.filter_by(pat_ema=form.email.data).first()
         if not user:
-            error = "존재하지 않는 사용자임 ㅋㅋ"
+            error = "존재하지 않는 사용자입니다."
         elif not check_password_hash(user.pat_pw, form.password.data):
-            error = "비밀번호 틀렸음 ㅋㅋ"
+            error = "비밀번호를 잘못 입력하셨습니다."
         if error is None:
             session.clear()
             session['user_id'] = user.pat_ema
@@ -40,9 +40,9 @@ def hos_login():
         error = None
         user = Hospital.query.filter_by(hos_cid=form.crn.data).first()
         if not user:
-            error = "존재하지 않는 사용자임 ㅋㅋ"
+            error = "존재하지 않는 사용자입니다."
         elif not check_password_hash(user.hos_pwd, form.password.data):
-            error = "비밀번호 틀렸음 ㅋㅋ"
+            error = "비밀번호를 잘못 입력하셨습니다."
         if error is None:
             session.clear()
             session['user_id'] = user.hos_cid
