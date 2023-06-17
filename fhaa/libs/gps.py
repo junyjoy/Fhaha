@@ -204,7 +204,7 @@ with open("insert_hospital.sql", "a", encoding="utf-8") as f:
     for x in enumerate(a):
         addr = x[1].split(", ")[0].split(" (")[0]
         
-        cid = str(int(random.random() * 1000000000))
+        cid = str(int(random.random() * 10000000000))
         tel = '02'+str(int(random.random() * 10000000))
         lat, lnt = get_location(addr)
         pwd = generate_password_hash("testtest")

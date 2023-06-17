@@ -122,16 +122,13 @@ def hospital_list():
             )
             db.session.add(matching)
             
+            # outerjoin 후 mat_id가 빈 것(매칭되지 않은 것)만 가져옴 
             # Request 테이블에서 매칭되지 않은 의뢰를 제거
-            # request_del = Request.query.filter(
-            #     Request.pat_ema==request_.pat_ema,
-            #     Request.req_date==request_.req_date, 
-            #     Request.req_chk==1
-            # )
             request_del =  Request.query.outerjoin(Matching).filter(
                 Request.pat_ema==request_.pat_ema,
                 Request.req_date==request_.req_date, 
-                Request.req_chk==0,    
+                Request.req_type==request_.req_type, 
+                Request.req_chk==1,    
                 Matching.mat_id==None
             )
             for r in request_del.all():
