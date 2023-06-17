@@ -3,7 +3,6 @@ from flask_sqlalchemy import SQLAlchemy
 from fhaa import db
 
 
-
 class Doctor(db.Model):
     __tablename__ = 'doctor'
     __table_args__ = (
@@ -37,15 +36,17 @@ class HosSub(db.Model):
 class Hospital(db.Model):
     __tablename__ = 'hospital'
 
+    hos_cid = db.Column(db.String(10), primary_key=True)
     hos_name = db.Column(db.String(20), nullable=False)
     hos_tel = db.Column(db.String(12), nullable=False)
     hos_addr1 = db.Column(db.String(80), nullable=False)
-    hos_cid = db.Column(db.String(10), primary_key=True)
+    hos_addr2 = db.Column(db.String(80))
     hos_pwd = db.Column(db.String(102), nullable=False)
     hos_type = db.Column(db.String(20), nullable=False)
-    hos_addr2 = db.Column(db.String(80))
-    hos_lat = db.Column(db.Float, nullable=False)
-    hos_lnt = db.Column(db.Float, nullable=False)
+    hos_lat = db.Column(db.Numeric(30, 20), nullable=False)
+    hos_lnt = db.Column(db.Numeric(30, 20), nullable=False)
+    # hos_lat = db.Column(db.String(30), nullable=False)
+    # hos_lnt = db.Column(db.String(30), nullable=False)
 
 
 
@@ -78,7 +79,8 @@ class Request(db.Model):
     req_req = db.Column(db.String(200), nullable=False)
     req_chk = db.Column(db.Integer, nullable=False, server_default=db.FetchedValue())
     hos_cid = db.Column(db.ForeignKey('hospital.hos_cid'), nullable=False, index=True)
-
+    req_dist = db.Column(db.Float, nullable=False)
+    
     hospital = db.relationship('Hospital', primaryjoin='Request.hos_cid == Hospital.hos_cid', backref='requests')
     user = db.relationship('User', primaryjoin='Request.pat_ema == User.pat_ema', backref='requests')
 

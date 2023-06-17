@@ -46,8 +46,8 @@ class Hospital(db.Model):
     hos_pwd = db.Column(db.String(102), nullable=False)
     hos_type = db.Column(db.String(20), nullable=False)
     hos_addr2 = db.Column(db.String(80))
-    hos_lat = db.Column(db.Float, nullable=False)
-    hos_lnt = db.Column(db.Float, nullable=False)
+    hos_lat = db.Column(db.Numeric(30, 20), nullable=False)
+    hos_lnt = db.Column(db.Numeric(30, 20), nullable=False)
 
 
 
@@ -80,6 +80,7 @@ class Request(db.Model):
     req_req = db.Column(db.String(200), nullable=False)
     hos_cid = db.Column(db.ForeignKey('hospital.hos_cid'), nullable=False, index=True)
     req_chk = db.Column(db.Integer, nullable=False, server_default=db.FetchedValue())
+    req_dist = db.Column(db.Float, nullable=False)
 
     hospital = db.relationship('Hospital', primaryjoin='Request.hos_cid == Hospital.hos_cid', backref='requests')
     user = db.relationship('User', primaryjoin='Request.pat_ema == User.pat_ema', backref='requests')

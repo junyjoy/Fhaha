@@ -4,6 +4,9 @@ from fhaa.models import Request, Subject, Hospital, HosSub, Matching
 import time, datetime
 from fhaa import db
 from fhaa.views.auth_views import login_required_for_patient, login_required_for_hospital, login_required_all
+from fhaa.libs import gps
+
+
 
 bp = Blueprint('request', __name__, url_prefix='/request')
 
@@ -35,11 +38,10 @@ def req_post() :
         .filter(Subject.ill_type==f_req_type)\
         .filter(Hospital.hos_lat >= location_lat-lat_KM, Hospital.hos_lat <= location_lat+lat_KM)\
         .filter(Hospital.hos_lnt >= location_lon-lon_KM, Hospital.hos_lnt <= location_lon+lon_KM)
-    print(location_lat-lat_KM, location_lat+lat_KM)
-    print(location_lon-lon_KM, location_lon+lon_KM)
-    
+        
     for hospital in hospitals:
-        print(hospital.hos_addr1)
+        # 환자 <-> 병원 거리
+        distance = gps.compare((location_lat, location_lon), (hospital.hos_lat, hospital.hos_lnt))
         r = Request(
                 req_type = f_req_type, 
                 req_loc = addr_now,
@@ -47,12 +49,13 @@ def req_post() :
                 req_req= f_req_req,
                 pat_ema = f_pat_ema,
                 req_date = f_req_date,
-                hos_cid = hospital.hos_cid
+                hos_cid = hospital.hos_cid,
+                req_dist = distance
             )
         db.session.add(r)          
     db.session.commit() 
     
-    return redirect(url_for('main.index'))
+    return redirect(url_for('request.hospital_list'))
 
 
 
@@ -73,17 +76,13 @@ def board():
 
         if check == "accept":
             f_req_id = request.form.get('req_id')
-            print(f_req_id)
             request_ = Request.query.filter_by(req_id=f_req_id)
             request_.update(dict(req_chk=0))
-            print(request_)
             db.session.add(request_.first())
             db.session.commit()
         else:
             f_req_id = request.form.get('req_id')
-            print(f_req_id)
             request_ = Request.query.filter_by(req_id=f_req_id)
-            print(request_)
             db.session.delete(request_.first())
             db.session.commit()
 
@@ -113,21 +112,27 @@ def hospital_list():
         # 환자가 `O` 버튼을 누르면
         if check == "accept":
             f_req_id = request.form.get('req_id')
-            requset_ = Request.query.filter(Request.req_id==f_req_id).first()
+            request_ = Request.query.filter(Request.req_id==f_req_id).first()
 
             # Matching 테이블에 데이터 생성
             matching = Matching(
-                req_id=requset_.req_id, 
-                pat_ema=requset_.pat_ema, 
-                hos_cid=requset_.hos_cid
+                req_id=request_.req_id, 
+                pat_ema=request_.pat_ema, 
+                hos_cid=request_.hos_cid
             )
             db.session.add(matching)
             
             # Request 테이블에서 매칭되지 않은 의뢰를 제거
-            request_del = Request.query.filter(
+            # request_del = Request.query.filter(
+            #     Request.pat_ema==request_.pat_ema,
+            #     Request.req_date==request_.req_date, 
+            #     Request.req_chk==1
+            # )
+            request_del =  Request.query.outerjoin(Matching).filter(
                 Request.pat_ema==request_.pat_ema,
-                Request.req_date==requset_.req_date, 
-                Request.req_chk==1
+                Request.req_date==request_.req_date, 
+                Request.req_chk==0,    
+                Matching.mat_id==None
             )
             for r in request_del.all():
                 db.session.delete(r)
@@ -142,21 +147,21 @@ def hospital_list():
             db.session.delete(request_.first())
             db.session.commit()
             
-        return redirect(url_for('request.board'))
+        return redirect(url_for('request.hospital_list'))
             
             
     page = request.args.get('page', type=int, default=1)  # 페이지
     
     # 이미 매칭된 request는 나오지 않도록 해야 함
     # outerjoin 후 mat_id가 빈 것(매칭되지 않은 것)만 가져옴 
+    # 그리고 가까운 거리순으로 정렬함
     request_list =  Request.query.outerjoin(Matching).filter(
         Request.pat_ema==g.user.pat_ema, 
         Request.req_chk==0,    
         Matching.mat_id==None
-    )
+    ).order_by(Request.req_dist)
 
     request_list = request_list.paginate(page=page, per_page=10)
-    print(request_list)
 
     return render_template('request/hospital_list.html', request_list=request_list, datetime=datetime)
 
@@ -167,7 +172,6 @@ def matching():
     '''환자와 병원 모두 현재 매칭 상태를 보여줌.
     '''
     page = request.args.get('page', type=int, default=1)  # 페이지
-    print(page)
 
     if g.user_type == "patient":
         matching_list = Matching.query.filter(Matching.pat_ema==g.user.pat_ema)
@@ -187,9 +191,7 @@ def matching():
 def match_():
     if request.method == 'POST' :
         user_id = request.args.get('user_id')
-        request.get_data()
         user_name = request.args.get('user_name')
-        print(user_id, user_name)
         return render_template('auth/congrats.html', user_id=user_id, user_name=user_name)
     else:
         return redirect(url_for('main.index'))

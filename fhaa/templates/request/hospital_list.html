@@ -15,6 +15,7 @@
                 <th>진료과목</th>
                 <th>병원명</th>
                 <th>병원 위치</th>
+                <th>거리</th>
                 <th>전화번호</th>
                 <th>선택</th>
             </tr>
@@ -31,6 +32,7 @@
                     {% else %}
                         <td> {{ request.hospital.hos_addr1 }}</td>
                     {% endif %}
+                    <td>약 {{ request.req_dist }}m</td>
                     <td>{{ request.hospital.hos_tel }}</td>
                     <td>
                         <div class="d-flex">
