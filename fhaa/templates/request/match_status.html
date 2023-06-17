@@ -18,6 +18,7 @@
                 <th>진료과목</th>
                 <th>병원명</th>
                 <th>병원주소</th>
+                <th>진료 희망시간</th>
             </tr>
             </thead>
             <tbody>
@@ -33,6 +34,8 @@
                     {% else %}
                         <td> {{ request.hospital.hos_addr1 }}</td>
                     {% endif %}
+                    {% set args = { 'req_date': request.req.req_date, 'req_time': request.req.req_time } %}
+                    <td>{{ args | add_datetime }}</td>
                 </tr>
             {% endfor %}
             {% else %}

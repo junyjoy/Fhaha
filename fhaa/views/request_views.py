@@ -128,7 +128,6 @@ def hospital_list():
                 Request.pat_ema==request_.pat_ema,
                 Request.req_date==request_.req_date, 
                 Request.req_type==request_.req_type, 
-                Request.req_chk==1,    
                 Matching.mat_id==None
             )
             for r in request_del.all():
