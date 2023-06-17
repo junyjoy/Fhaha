@@ -11,6 +11,10 @@
                 {% include "form_errors.html" %}
                 <table class="table table-striped row">
                     <tr class="d-flex flex-column">
+                        <th>병원 이름</th>
+                        <td><input class="form-control" type="text" name="name" value="{{ form.name.data or '' }}"></td>
+                    </tr>
+                    <tr class="d-flex flex-column">
                         <th>병원 위치</th>
                         <td>
                             <div class="d-flex">
