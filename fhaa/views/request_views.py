@@ -39,24 +39,29 @@ def req_post() :
         .filter(Hospital.hos_lat >= location_lat-lat_KM, Hospital.hos_lat <= location_lat+lat_KM)\
         .filter(Hospital.hos_lnt >= location_lon-lon_KM, Hospital.hos_lnt <= location_lon+lon_KM)
         
-    for hospital in hospitals:
-        # 환자 <-> 병원 거리
-        distance = gps.compare((location_lat, location_lon), (hospital.hos_lat, hospital.hos_lnt))
-        if distance < 1.:
-            distance = 0.            
-        r = Request(
-                req_type = f_req_type, 
-                req_loc = addr_now,
-                req_time = f_req_time,
-                req_req= f_req_req,
-                pat_ema = f_pat_ema,
-                req_date = f_req_date,
-                hos_cid = hospital.hos_cid,
-                req_dist = distance
-            )
-        db.session.add(r)          
-    db.session.commit() 
-    
+    if hospitals.first() == None:
+        error = "인근의 병원을 찾을 수 없습니다. 다른 위치에서 다시 시도해주세요."
+        flash(error)
+        return redirect(url_for('request.req_post'))
+    else:
+        for hospital in hospitals:
+            # 환자 <-> 병원 거리
+            distance = gps.compare((location_lat, location_lon), (hospital.hos_lat, hospital.hos_lnt))
+            if distance < 1.:
+                distance = 0.            
+            r = Request(
+                    req_type = f_req_type, 
+                    req_loc = addr_now,
+                    req_time = f_req_time,
+                    req_req= f_req_req,
+                    pat_ema = f_pat_ema,
+                    req_date = f_req_date,
+                    hos_cid = hospital.hos_cid,
+                    req_dist = distance
+                )
+            db.session.add(r)          
+        db.session.commit() 
+        
     return redirect(url_for('request.hospital_list'))
 
 
@@ -82,8 +87,9 @@ def board():
             
             # request_.first()가 None 경우 == 받은 req_id의 데이터가 이미 삭제되었을 경우
             if request_.first() == None:
-               error = "이미 만료된 요청입니다."
-               return redirect(url_for('request.board'))
+                error = "이미 진료 희망시간으 초과해 만료된 요청입니다."
+                flash(error)
+                return redirect(url_for('request.board'))
             
             # 현재 시간과 req_date+req_time을 비교하여 현재 시간이 더 크면 불가해야함     
             # 병원이 새로고침을 하지 않은 상태라면 `진료 요청시간`을 넘겼음에도 수락이 되기 때문에
@@ -91,8 +97,7 @@ def board():
             req_time = datetime.timedelta(minutes=int(request_.first().req_time))
             req_limit_time = request_.first().req_date + req_time   
             if datetime.datetime.now() > req_limit_time:
-                # TODO : 사용자에게 알려야 함
-                error = "이미 진료 요청시간을 초과하였습니다."
+                error = "이미 진료 희망시간을 초과하였습니다."
                 db.session.delete(request_.first())
                 db.session.commit()
                     
@@ -110,6 +115,7 @@ def board():
             db.session.delete(request_.first())
             db.session.commit()
             
+        flash(error)
         return redirect(url_for('request.board'))
     
     page = request.args.get('page', type=int, default=1)  # 페이지
