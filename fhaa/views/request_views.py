@@ -93,6 +93,9 @@ def board():
             if datetime.datetime.now() > req_limit_time:
                 # TODO : 사용자에게 알려야 함
                 error = "이미 진료 요청시간을 초과하였습니다."
+                db.session.delete(request_.first())
+                db.session.commit()
+                    
             else:
                 request_.update(dict(req_chk=0))
                 db.session.add(request_.first())
@@ -102,7 +105,7 @@ def board():
             f_req_id = request.form.get('req_id')
             request_ = Request.query.filter_by(req_id=f_req_id)
             # request_.first()가 None 경우 == 받은 req_id의 데이터가 이미 삭제되었을 경우
-            if len(request_) == 0:
+            if request_.first() == None:
                 return redirect(url_for('request.board'))
             db.session.delete(request_.first())
             db.session.commit()
