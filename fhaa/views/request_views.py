@@ -77,15 +77,23 @@ def board():
         if check == "accept":
             f_req_id = request.form.get('req_id')
             request_ = Request.query.filter_by(req_id=f_req_id)
-            request_.update(dict(req_chk=0))
-            db.session.add(request_.first())
-            db.session.commit()
+            
+            # TODO : 현재 시간과 req_date+req_time을 비교하여 현재 시간이 더 크면 불가해야함       
+            req_time = datetime.timedelta(minutes=request_.req_time)
+            req_limit_time = request_.req_date+req_time   
+            if datetime.datetime.now() > req_limit_time:
+                error = "이미 진료 요청시간을 초과하였습니다."
+            else:
+                request_.update(dict(req_chk=0))
+                db.session.add(request_.first())
+                db.session.commit()
         else:
             f_req_id = request.form.get('req_id')
             request_ = Request.query.filter_by(req_id=f_req_id)
             db.session.delete(request_.first())
             db.session.commit()
-
+            
+        flash(error)
         return redirect(url_for('request.board'))
     
     page = request.args.get('page', type=int, default=1)  # 페이지

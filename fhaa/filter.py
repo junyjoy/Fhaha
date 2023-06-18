@@ -1,6 +1,8 @@
 # UnicodeEncodeError 오류가 발생 시 주석해제
 # import locale
 # locale.setlocale(locale.LC_ALL, '')
+
+
 import datetime
 from fhaa.libs.gps import get_location, compare
 
@@ -16,7 +18,7 @@ def get_distance(args):
     loc = args['loc']
     lat = args['hos_lat']
     lnt = args['hos_lnt']
-    result = gps.compare(gps.get_location(loc), (lat, lnt))
+    result = compare(get_location(loc), (lat, lnt))
     print(result)
     
 
