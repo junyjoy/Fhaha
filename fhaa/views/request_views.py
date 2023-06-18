@@ -78,15 +78,18 @@ def board():
             f_req_id = request.form.get('req_id')
             request_ = Request.query.filter_by(req_id=f_req_id)
             
-            # TODO : 현재 시간과 req_date+req_time을 비교하여 현재 시간이 더 크면 불가해야함       
-            req_time = datetime.timedelta(minutes=request_.req_time)
-            req_limit_time = request_.req_date+req_time   
+            # 현재 시간과 req_date+req_time을 비교하여 현재 시간이 더 크면 불가해야함     
+            # 병원이 새로고침을 하지 않은 상태라면 `진료 요청시간`을 넘겼음에도 수락이 되기 때문에
+            # 아래와 같이 현재 시간과 비교하여 처리함
+            req_time = datetime.timedelta(minutes=request_.first().req_time)
+            req_limit_time = request_.first().req_date + req_time   
             if datetime.datetime.now() > req_limit_time:
                 error = "이미 진료 요청시간을 초과하였습니다."
             else:
                 request_.update(dict(req_chk=0))
                 db.session.add(request_.first())
                 db.session.commit()
+                
         else:
             f_req_id = request.form.get('req_id')
             request_ = Request.query.filter_by(req_id=f_req_id)
