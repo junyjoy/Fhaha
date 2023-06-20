@@ -5,6 +5,7 @@ from werkzeug.utils import redirect
 from fhaa import db
 from fhaa.forms import UserLoginForm, HospitalLoginForm
 from fhaa.models import User, Hospital, Subject
+import datetime
 
 bp = Blueprint('login',__name__,url_prefix='/login')
 
@@ -78,6 +79,8 @@ def logout():
 
 @bp.before_app_request
 def load_logged_in_user():
+    print(datetime.datetime.now())
+    
     user_id = session.get('user_id')
     user_type = session.get('user_type')
     
