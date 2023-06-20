@@ -38,7 +38,7 @@ def req_post() :
         .filter(Subject.ill_type==f_req_type)\
         .filter(Hospital.hos_lat >= location_lat-lat_KM, Hospital.hos_lat <= location_lat+lat_KM)\
         .filter(Hospital.hos_lnt >= location_lon-lon_KM, Hospital.hos_lnt <= location_lon+lon_KM)
-        
+    
     if hospitals.first() == None:
         error = "인근의 병원을 찾을 수 없습니다. 다른 위치에서 다시 시도해주세요."
         flash(error)
@@ -115,7 +115,6 @@ def board():
             db.session.delete(request_.first())
             db.session.commit()
             
-        flash(error)
         return redirect(url_for('request.board'))
     
     page = request.args.get('page', type=int, default=1)  # 페이지
