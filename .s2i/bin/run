@@ -125,21 +125,9 @@ if is_gunicorn_installed; then
   fi
 fi
 
-
-if is_flask_installed; then
-  if [[ -f "$manage_file" ]]; then
-    echo "---> Serving application with 'manage.py runserver 0.0.0.0:$PORT' ..."
-    echo "WARNING: this is NOT a recommended way to run you application in production!"
-    echo "Consider using gunicorn or some other production web server."
-    maybe_run_in_init_wrapper python "$manage_file" runserver 0.0.0.0:$PORT
-  else
-    echo "WARNING: seems that you're using Django, but we could not find a 'manage.py' file."
-    echo "Skipped 'python manage.py runserver'."
-  fi
-fi
+ln -sf /usr/share/zoneinfo/Asia/Seoul /etc/localtime
 
 >&2 echo "ERROR: don't know how to run your application."
 >&2 echo "Please set either APP_MODULE, APP_FILE or APP_SCRIPT environment variables, or create a file 'app.py' to launch your application."
 exit 1
 
-ln -sf /usr/share/zoneinfo/Asia/Seoul /etc/localtime
