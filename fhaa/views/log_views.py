@@ -29,6 +29,7 @@ def pat_login():
             session.clear()
             session['user_id'] = user.pat_ema
             session['user_type'] = "patient"
+            print(user)
             return redirect(url_for('main.index'))
         flash(error)
     return render_template('log/pat_login.html', form=form)
@@ -79,8 +80,6 @@ def logout():
 
 @bp.before_app_request
 def load_logged_in_user():
-    print(datetime.datetime.now())
-    
     user_id = session.get('user_id')
     user_type = session.get('user_type')
     
